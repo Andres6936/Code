@@ -1,0 +1,19 @@
+body{background:#111;text-align:center;margin:5px;margin-top:8px;color:#eee;font:14px tahoma;}
+table{caret-color: transparent !important;font-size:24px;margin:auto;color:#555;margin-top:5px;border:2px solid #111;border-collapse:collapse;}
+
+td{background:#3334;color:#8DF;outline:none;height:65px;min-width:65px;text-align:center;
+    border-top:1px solid #5554;border-left:1px solid #5554;}
+
+td:nth-child(3n+3) {border-right:5px solid #111; }
+
+tr:nth-child(3n+3) {border-bottom:5px solid #111;}
+td.hibak{background:#222 !important;}
+td:hover{background:#4465 !important;}
+td.isfoc{background:#5575 !important;}
+td.given{color:#999;}
+td.hinum{color:yellow !important;}
+td.noted{box-shadow: inset 0px 0px 3px 1px white;}
+td.cellerror{color:red !important;}
+input{outline:none;color:#eee;border:1px solid #444;background:#222;text-align:center;margin-top:5px;margin-bottom:5px;display:block;width:100%;padding:5px;font-size:16px;font-family:monospace;}
+span{font-weight:bold;font-size:12px;}
+button{color:#aaa;border:0;background:#222;font-size:20px;margin:12px;padding:6px;}button:hover{background:#333;}
