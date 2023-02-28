@@ -1,5 +1,10 @@
+:root {
+    --primary-color-100: #111;
+    --primary-color-200: #555;
+}
+
 body {
-    background: #111;
+    background: var(--primary-color-100);
     text-align: center;
     margin: 5px;
     margin-top: 8px;
@@ -11,9 +16,9 @@ table {
     caret-color: transparent !important;
     font-size: 24px;
     margin: auto;
-    color: #555;
+    color: var(--primary-color-200);
     margin-top: 5px;
-    border: 2px solid #111;
+    border: 2px solid var(--primary-color-100);
     border-collapse: collapse;
 }
 
@@ -29,11 +34,11 @@ td {
 }
 
 td:nth-child(3n+3) {
-    border-right: 5px solid #111;
+    border-right: 5px solid var(--primary-color-100);
 }
 
 tr:nth-child(3n+3) {
-    border-bottom: 5px solid #111;
+    border-bottom: 5px solid var(--primary-color-100);
 }
 
 td.hibak {
