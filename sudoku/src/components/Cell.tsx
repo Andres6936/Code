@@ -1,22 +1,20 @@
 import React, {useState} from "react";
 import {Coordinate} from "../types/Coordinate";
-import {UseBoard} from "../hooks/useBoard";
 
 interface Props {
-    board: UseBoard,
+    placeholder: number | undefined,
     coordinate: Coordinate
 }
 
 export function Cell(props: Props) {
-    const [cell, setCell] = useState(props.board.getCell({x: props.coordinate.x, y: props.coordinate.y}))
     const [notes, setNotes] = useState();
     const [number, setNumber] = useState<number>(0);
     const [solution, setSolution] = useState()
     const [isWrongNumber, setIsWrongNumber] = useState<boolean>(false);
 
     const getValue = () => {
-        if (cell && cell.value) {
-            return cell.value
+        if (props.placeholder) {
+            return props.placeholder;
         } else {
             return ''
         }
