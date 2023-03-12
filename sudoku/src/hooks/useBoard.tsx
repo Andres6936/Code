@@ -50,9 +50,7 @@ export function useBoard(board: number[]) {
                 [6, 1], [7, 1], [8, 1],
                 [6, 2], [7, 2], [8, 2],
             ])
-        }
-
-        if (x === 0 && y === 1) {
+        } else if (x === 0 && y === 1) {
             return getCells([
                 [0, 3], [1, 3], [2, 3],
                 [0, 4], [1, 4], [2, 4],
@@ -70,9 +68,7 @@ export function useBoard(board: number[]) {
                 [6, 4], [7, 4], [8, 4],
                 [6, 5], [7, 5], [8, 5],
             ])
-        }
-
-        if (x === 0 && y === 2) {
+        } else if (x === 0 && y === 2) {
             return getCells([
                 [0, 6], [1, 6], [2, 6],
                 [0, 7], [1, 7], [2, 7],
