@@ -2,7 +2,12 @@
 
 import {useBoard} from "./useBoard";
 
-export function useSudoku() {
+export interface UseSudoku {
+    solution: UseBoard;
+    board: UseBoard
+}
+
+export function useSudoku(): UseSudoku {
     // not what i thought it was, but keeping it here
     function normalize() {
         let row1 = puzzle.slice(0, 9);

@@ -1,8 +1,10 @@
 import React from "react";
 import {Cell} from "./Cell";
 import {Coordinate} from "../types/Coordinate";
+import {UseBoard} from "../hooks/useBoard";
 
 interface Props {
+    board: UseBoard,
     coordinate: Coordinate
 }
 

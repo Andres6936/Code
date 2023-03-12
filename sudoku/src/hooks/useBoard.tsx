@@ -1,26 +1,14 @@
 import {Coordinate} from "../types/Coordinate";
 import {Cell, OptionalCell} from "../types/Cell";
+import {useDelimited} from "./useDelimited";
 
-function useDelimited(board: number[]) {
-    const zones: Cell[] = []
-    let axisX = 0;
-    let axisY = 0;
-    for (let index = 0; index < board.length; index++) {
-        zones.push({
-            x: axisX,
-            y: axisY,
-            value: board.at(index) as number
-        })
-        axisX += 1;
-        if (axisX === 9) {
-            axisX = 0;
-            axisY += 1;
-        }
-    }
-    return zones;
+export interface UseBoard {
+    zones: Cell[],
+    getCell: ({x, y}: Coordinate) => OptionalCell,
+    getZone: ({x, y}: Coordinate) => (OptionalCell[] | null),
 }
 
-export function useBoard(board: number[]) {
+export function useBoard(board: number[]): UseBoard {
     const zones: Cell[] = useDelimited(board);
 
     const getCells = (coordinates: Array<[number, number]>): OptionalCell[] => {
