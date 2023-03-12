@@ -240,102 +240,11 @@ function savePuzzle() {
 
 
 function onLoad() {
-    var currentCell;
-    var tbl: NodeListOf<HTMLTableDataCellElement> = document.querySelectorAll("table.sudoku td");
-    var info = document.querySelector("div.info");
+
     var input = document.querySelector("input#c0de");
-    let n0te = document.querySelector("input#n0te");
-    for (var i = 0, y = true; i < tbl.length; i++) {
-        tbl[i].contentEditable = "true";
-        tbl[i].notes = {};
-
-        tbl[i].oninput = function (e) {
-            if (this.solution && e.data != this.solution) this.classList.add('cellerror');
-            else {
-                this.classList.remove('cellerror');
-            }
-            if (this.textContent === hicur) lolwut.push(this), this.classList.add('hinum');
-            if (this.textContent !== hicur) this.classList.remove('hinum');
-            loadPuzzle(savePuzzle());
-        }
-        tbl[i].onkeypress = function (e) {
-            if (e.keyCode < 48 || e.keyCode > 57) return false;
-            this.textContent = "";
-        };
 
 
-        tbl[i].oncontextmenu = function () {
-
-            this.notes[hicur] = !this.notes[hicur];
-            console.log(this.notes);
-            console.log(currentCell, hicur)
-            if (this.classList.contains("noted"))
-                currentCell.classList.remove('noted');
-            else
-                currentCell.classList.add('noted');
-            return false;
-        }
-
-
-        var notes = document.querySelectorAll('button')
-
-
-        tbl[i].addEventListener('focus', function () {
-            this.classList.add('isfoc');
-            currentCell = this;
-            //n0te.value = this.notez || "";
-        });
-
-        tbl[i].addEventListener('blur', function () {
-            this.classList.remove('isfoc');
-        });
-        var hicur, lolwut = [], lolwut2 = [];
-        tbl[i].onclick = function (e) {
-
-            for (var i = 0; i < lolwut2.length; i++)
-                lolwut2[i].classList.remove('hibak');
-
-            const idx = [...this.parentElement.children].indexOf(this);
-            lolwut2 = Array.from(document.querySelectorAll('td'))
-                .filter(el => el.id === this.id || el.parentNode === this.parentNode);
-            for (var i = 0; i < 9; i++) lolwut2.push(tbl[i * 9 + idx]);
-
-            for (var i = 0; i < lolwut2.length; i++)
-                lolwut2[i].classList.add('hibak');
-
-            ////////////////////////////////////////////////////////////////////////////////////
-
-            if (this.textContent === "") return;
-            for (var i = 0; i < lolwut.length; i++)
-                lolwut[i].classList.remove('hinum');
-
-            var allz = document.querySelectorAll('td');
-            for (var i = 0; i < 81; i++)
-                allz[i].classList.remove('noted');
-            // if currently highlighted
-
-            //if(this.textContent===hicur) {hicur='';return;}
-
-            if (this.textContent !== "") hicur = this.textContent;
-
-            lolwut = Array.from(document.querySelectorAll('td'))
-                .filter(el => el.textContent === this.textContent);
-
-            for (var i = 0; i < lolwut.length; i++)
-                lolwut[i].classList.add('hinum');
-
-            for (var i = 0; i < 81; i++)
-                allz[i].notes[hicur] && allz[i].classList.add('noted');
-        }
-
-
-    }
     input.oninput = function () {
-        for (let j = 0; j < 81; j++)
-            tbl[j].innerHTML = "",
-                tbl[j].classList = "",
-                tbl[j].solution = "",
-                tbl[j].contentEditable = "true";
 
         if (input.value.length === 81) {
             for (var packed = [], i = 0; i < 81; i += 2) {
