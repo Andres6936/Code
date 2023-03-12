@@ -1,4 +1,6 @@
-export function generate() {
+// @ts-nocheck
+
+export function useSudoku() {
     // not what i thought it was, but keeping it here
     function normalize() {
         let row1 = puzzle.slice(0, 9);
@@ -199,7 +201,10 @@ export function generate() {
         return wtf > 20 ? prior : remove(puzzle, removals);
     }
 
-    var wtf = 0, ls = [], outp = mask(puzzle), outt = document.querySelectorAll(".sudoku td");
+    var wtf = 0;
+    var ls = [];
+    var outp = mask(puzzle);
+    var outt = document.querySelectorAll(".sudoku td");
 
     for (var i = 0; i < outp.length; i++) if (outp[i]) ls.push(i)
     shuffle(ls)
@@ -218,5 +223,10 @@ export function generate() {
         outt[i].contentEditable = outp[i] ? false : true;
     }
     console.log('Sudoku Generated:', outp.toString().replace(/,/g, ''));
-    loadPuzzle(savePuzzle());
+    // loadPuzzle(savePuzzle());
+
+    return {
+        board: outp,
+        solution: puzzle
+    }
 }

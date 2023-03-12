@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 function bmap(val, mode = 0) {
     var i, data = mode ? [...val].map(a => a.charCodeAt()) : val.slice(),
         tbl = [
