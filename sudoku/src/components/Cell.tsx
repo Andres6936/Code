@@ -24,7 +24,7 @@ export function Cell(props: Props) {
     return (
         <div onInput={() => checkInput()}
              className={"display:flex flex-grow:1 b:1px|solid|#CCC align-items:center justify-content:center"}>
-            <p className={"font:bold"}>{number}</p>
+            <p className={"font:bold"}>{number === 0 ? "" : number}</p>
         </div>
     )
 }
