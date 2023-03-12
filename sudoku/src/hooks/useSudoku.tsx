@@ -1,5 +1,7 @@
 // @ts-nocheck
 
+import {useBoard} from "./useBoard";
+
 export function useSudoku() {
     // not what i thought it was, but keeping it here
     function normalize() {
@@ -226,7 +228,7 @@ export function useSudoku() {
     // loadPuzzle(savePuzzle());
 
     return {
-        board: outp,
-        solution: puzzle
+        board: useBoard(outp),
+        solution: useBoard(puzzle)
     }
 }

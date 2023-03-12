@@ -6,7 +6,8 @@ export function Board() {
     const sudoku = useSudoku();
 
     useEffect(() => {
-        console.log(sudoku)
+        console.log(sudoku.board.zones, 'Boards')
+        console.log(sudoku.solution.zones, 'Solutions')
     }, [sudoku])
 
     return (
