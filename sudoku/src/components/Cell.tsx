@@ -1,6 +1,11 @@
 import React, {useState} from "react";
+import {Coordinate} from "../types/Coordinate";
 
-export function Cell() {
+interface Props {
+    coordinate: Coordinate
+}
+
+export function Cell(props: Props) {
     const [notes, setNotes] = useState();
     const [number, setNumber] = useState<number>(0);
     const [solution, setSolution] = useState()
