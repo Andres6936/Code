@@ -1,5 +1,5 @@
 import {Coordinate} from "../types/Coordinate";
-import {Cell} from "../types/Cell";
+import {Cell, OptionalCell} from "../types/Cell";
 
 function useDelimited(board: number[]) {
     const zones: Cell[] = []
@@ -23,15 +23,15 @@ function useDelimited(board: number[]) {
 export function useBoard(board: number[]) {
     const zones: Cell[] = useDelimited(board);
 
-    const getCells = (coordinates: Array<[number, number]>): Cell[] => {
-        const values: Cell[] = []
+    const getCells = (coordinates: Array<[number, number]>): OptionalCell[] => {
+        const values: OptionalCell[] = []
         for (let [x, y] of coordinates) {
             values.push(getCell({x, y}))
         }
         return values
     }
 
-    const getZone = ({x, y}: Coordinate): Cell[] | null => {
+    const getZone = ({x, y}: Coordinate): OptionalCell[] | null => {
         if (x === 0 && y === 0) {
             return getCells([
                 [0, 0], [1, 0], [2, 0],
@@ -91,7 +91,11 @@ export function useBoard(board: number[]) {
         return null;
     }
 
-    const getCell = ({x, y}: Coordinate): Cell => {
+    const getCell = ({x, y}: Coordinate): OptionalCell => {
+        const value = zones.find(zone => zone.x === x && zone.y === y);
+        if (value) {
+            return value
+        }
         return null;
     }
 
