@@ -14,11 +14,12 @@ function bmap(val, mode = 0) {
     return mode ? data : String.fromCharCode.apply(0, data);
 }
 
-arst = a => {
+const arst = a => {
     return a.trim ? [...a].map(a => a.charCodeAt()) : String.fromCharCode.apply(0, a)
 }
 
 function cksm(d) {
+    let s;
     for (var i = s = 0; i < d.length; ++i) s += (s << 1) + d[i];
     s ^= s << 9;
     s ^= s << 16;
@@ -45,7 +46,7 @@ var crc8 = function (data) {
     }
 }();
 
-function loadPuzzle(str2) {
+function loadPuzzle(str2: string) {
     if (!str2) {
         return
     }
@@ -237,13 +238,13 @@ function savePuzzle() {
     return btoa(arst(output)).replace(/=/g, "");
 }
 
-//////////////////////////////////////////////////////
-var tbl, info, input, currentCell;
-window.onload = function () {
-    tbl = document.querySelectorAll("table.sudoku td");
-    info = document.querySelector("div.info");
-    input = document.querySelector("input#c0de");
-    n0te = document.querySelector("input#n0te");
+
+function onLoad() {
+    var currentCell;
+    var tbl: NodeListOf<HTMLTableDataCellElement> = document.querySelectorAll("table.sudoku td");
+    var info = document.querySelector("div.info");
+    var input = document.querySelector("input#c0de");
+    let n0te = document.querySelector("input#n0te");
     for (var i = 0, y = true; i < tbl.length; i++) {
         tbl[i].contentEditable = "true";
         tbl[i].notes = {};
@@ -330,7 +331,7 @@ window.onload = function () {
 
     }
     input.oninput = function () {
-        for (j = 0; j < 81; j++)
+        for (let j = 0; j < 81; j++)
             tbl[j].innerHTML = "",
                 tbl[j].classList = "",
                 tbl[j].solution = "",
@@ -359,3 +360,5 @@ window.onload = function () {
 
     };
 };
+
+export {};

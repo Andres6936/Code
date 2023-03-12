@@ -1,4 +1,4 @@
-function generate() {
+export function generate() {
     // not what i thought it was, but keeping it here
     function normalize() {
         let row1 = puzzle.slice(0, 9);
