@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Zone} from "./Zone";
-import {useSudoku} from "../useSudoku";
+import {useSudoku} from "../hooks/useSudoku";
 
 export function Board() {
     const sudoku = useSudoku();
