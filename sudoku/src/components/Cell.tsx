@@ -1,20 +1,24 @@
 import React, {useState} from "react";
 import {Coordinate} from "../types/Coordinate";
+import {OptionalCell} from "../types/Cell";
+import {useZone} from "../hooks/useZone";
 
 interface Props {
-    placeholder: number | undefined,
+    zone: OptionalCell[] | null,
     coordinate: Coordinate
 }
 
 export function Cell(props: Props) {
+    const placeholder = useZone(props.zone).getCell(props.coordinate);
+
     const [notes, setNotes] = useState();
     const [number, setNumber] = useState<number>(0);
     const [solution, setSolution] = useState()
     const [isWrongNumber, setIsWrongNumber] = useState<boolean>(false);
 
     const getValue = () => {
-        if (props.placeholder) {
-            return props.placeholder;
+        if (placeholder) {
+            return placeholder;
         } else {
             return '  '
         }

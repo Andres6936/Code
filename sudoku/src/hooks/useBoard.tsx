@@ -5,8 +5,7 @@ import {useDelimited} from "./useDelimited";
 export interface UseBoard {
     zones: Cell[],
     getCell: ({x, y}: Coordinate) => OptionalCell,
-    getZone: ({x, y}: Coordinate) => (OptionalCell[] | null),
-    getCellByZone: (zone: OptionalCell[] | null, coordinate: Coordinate) => number | null
+    getZone: ({x, y}: Coordinate) => (OptionalCell[] | null)
 }
 
 export function useBoard(board: number[]): UseBoard {
@@ -80,29 +79,7 @@ export function useBoard(board: number[]): UseBoard {
         return null;
     }
 
-    const getCellByZone = (zone: OptionalCell[] | null, coordinate: Coordinate): number | null => {
-        if (coordinate.x === 0 && coordinate.y === 0) {
-            return zone?.at(0)?.value ?? null;
-        } else if (coordinate.x === 1 && coordinate.y === 0) {
-            return zone?.at(1)?.value ?? null;
-        } else if (coordinate.x === 2 && coordinate.y === 0) {
-            return zone?.at(2)?.value ?? null;
-        } else if (coordinate.x === 0 && coordinate.y === 1) {
-            return zone?.at(3)?.value ?? null;
-        } else if (coordinate.x === 1 && coordinate.y === 1) {
-            return zone?.at(4)?.value ?? null;
-        } else if (coordinate.x === 2 && coordinate.y === 1) {
-            return zone?.at(5)?.value ?? null;
-        } else if (coordinate.x === 0 && coordinate.y === 2) {
-            return zone?.at(6)?.value ?? null;
-        } else if (coordinate.x === 1 && coordinate.y === 2) {
-            return zone?.at(7)?.value ?? null;
-        } else if (coordinate.x === 2 && coordinate.y === 2) {
-            return zone?.at(8)?.value ?? null;
-        }
 
-        return null;
-    }
 
     const getCell = ({x, y}: Coordinate): OptionalCell => {
         const value = zones.find(zone => zone.x === x && zone.y === y);
@@ -112,5 +89,5 @@ export function useBoard(board: number[]): UseBoard {
         return null;
     }
 
-    return {zones, getZone, getCell, getCellByZone}
+    return {zones, getZone, getCell}
 }
