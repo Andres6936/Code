@@ -16,7 +16,7 @@ export function Cell(props: Props) {
         if (props.placeholder) {
             return props.placeholder;
         } else {
-            return ''
+            return '  '
         }
     }
 
@@ -32,7 +32,7 @@ export function Cell(props: Props) {
 
     return (
         <div onInput={() => checkInput()}
-             className={"display:flex flex-grow:1 b:1px|solid|#CCC align-items:center justify-content:center"}>
+             className={"display:flex flex-grow:1 b:1px|solid|#CCC align-items:center justify-content:center white-space:pre-wrap"}>
             <p className={"font:bold"}>{getValue()}</p>
         </div>
     )
