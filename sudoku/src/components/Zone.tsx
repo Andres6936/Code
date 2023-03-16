@@ -1,16 +1,16 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Cell} from "./Cell";
 import {Coordinate} from "../types/Coordinate";
-import {UseBoard} from "../hooks/useBoard";
 import {OptionalCell} from "../types/Cell";
+import {SudokuContext} from "../context/SudokuContext";
 
 interface Props {
-    board: UseBoard,
     coordinate: Coordinate
 }
 
 export function Zone(props: Props) {
-    const zone: OptionalCell[] | null = props.board.getZone(props.coordinate)
+    const sudoku = useContext(SudokuContext).sudoku;
+    const zone: OptionalCell[] | null = sudoku.board.getZone(props.coordinate)
 
     return (
         <div className={"display:flex flex:col flex-grow:1 m:0.5rem"}>
