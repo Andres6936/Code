@@ -3,7 +3,7 @@ import {Zone} from "./Zone";
 
 export function Board() {
     return (
-        <div className="sudoku my:2rem">
+        <div className="sudoku w:35rem my:2rem">
             <div className={"display:flex flex:row"}>
                 <Zone coordinate={{x: 0, y: 0}}/>
                 <Zone coordinate={{x: 1, y: 0}}/>
