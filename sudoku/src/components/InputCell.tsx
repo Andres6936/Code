@@ -29,9 +29,9 @@ export function InputCell(props: Props) {
 
     const getClassFocused = () => {
         if (isFocusedByUser()) {
-            return "bg:red"
+            return "bg:sky-80"
         } else {
-            return ""
+            return "bg:sky-88"
         }
     }
 
@@ -54,7 +54,7 @@ export function InputCell(props: Props) {
 
     return (
         <div onClick={() => checkInput()}
-             className={"display:flex flex-grow:1 b:1px|solid|#CCC align-items:center justify-content:center white-space:pre-wrap " + getClassFocused()}>
+             className={"display:flex flex-grow:1 b:2px|solid|sky-92 align-items:center justify-content:center white-space:pre-wrap " + getClassFocused()}>
             <p className={"font:bold"}>{getPlaceholder()}</p>
         </div>
     )
