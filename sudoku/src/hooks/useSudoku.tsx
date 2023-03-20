@@ -10,35 +10,35 @@ export interface UseSudoku {
 export function useSudoku(): UseSudoku {
     // not what i thought it was, but keeping it here
     function normalize() {
-        let row1 = puzzle.slice(0, 9);
-        for (let i = 0; i < puzzle.length; i++) {
-            switch (puzzle[i]) {
+        let row1 = boardSolution.slice(0, 9);
+        for (let i = 0; i < boardSolution.length; i++) {
+            switch (boardSolution[i]) {
                 case row1[0]:
-                    puzzle[i] = 1;
+                    boardSolution[i] = 1;
                     break;
                 case row1[1]:
-                    puzzle[i] = 2;
+                    boardSolution[i] = 2;
                     break;
                 case row1[2]:
-                    puzzle[i] = 3;
+                    boardSolution[i] = 3;
                     break;
                 case row1[3]:
-                    puzzle[i] = 4;
+                    boardSolution[i] = 4;
                     break;
                 case row1[4]:
-                    puzzle[i] = 5;
+                    boardSolution[i] = 5;
                     break;
                 case row1[5]:
-                    puzzle[i] = 6;
+                    boardSolution[i] = 6;
                     break;
                 case row1[6]:
-                    puzzle[i] = 7;
+                    boardSolution[i] = 7;
                     break;
                 case row1[7]:
-                    puzzle[i] = 8;
+                    boardSolution[i] = 8;
                     break;
                 case row1[8]:
-                    puzzle[i] = 9;
+                    boardSolution[i] = 9;
                     break;
             }
         }
@@ -48,10 +48,10 @@ export function useSudoku(): UseSudoku {
         let size = 9, result = [];
         for (let i = 0; i < size; ++i) {
             for (let j = 0; j < size; ++j) {
-                result[i * size + j] = puzzle[(size - j - 1) * size + i];
+                result[i * size + j] = boardSolution[(size - j - 1) * size + i];
             }
         }
-        puzzle = result;
+        boardSolution = result;
     }
 
     function shuffle(arr) {
@@ -85,7 +85,7 @@ export function useSudoku(): UseSudoku {
     }
 
     // Start with a complete valid Sudoku
-    var puzzle = [
+    var boardSolution = [
         1, 6, 7, 9, 8, 5, 2, 3, 4,
         8, 4, 5, 2, 3, 1, 9, 6, 7,
         9, 3, 2, 4, 7, 6, 5, 8, 1,
@@ -109,13 +109,13 @@ export function useSudoku(): UseSudoku {
         shuffle(num);
         num2 = num.slice(-2);
         //console.log(num, num2)
-        for (let i = 0; i < puzzle.length; i++) {
-            switch (puzzle[i]) {
+        for (let i = 0; i < boardSolution.length; i++) {
+            switch (boardSolution[i]) {
                 case num2[0]:
-                    puzzle[i] = num2[1];
+                    boardSolution[i] = num2[1];
                     break;
                 case num2[1]:
-                    puzzle[i] = num2[0];
+                    boardSolution[i] = num2[0];
                     break;
             }
         }
@@ -126,7 +126,7 @@ export function useSudoku(): UseSudoku {
         var idx = (Math.random() * 3 | 0) * 3, set = [idx + 0, idx + 1, idx + 2];
         shuffle(set);
         var swap = set.slice(-2);
-        puzzle = Math.random() > .5 ? swapRows(puzzle, swap[0], swap[1]) : swapCols(puzzle, swap[0], swap[1])
+        boardSolution = Math.random() > .5 ? swapRows(boardSolution, swap[0], swap[1]) : swapCols(boardSolution, swap[0], swap[1])
     }
 
     function* solver(board) {
@@ -210,30 +210,30 @@ export function useSudoku(): UseSudoku {
 
     var wtf = 0;
     var ls = [];
-    var outp = mask(puzzle);
+    var boardIncognites = mask(boardSolution);
     var outt = document.querySelectorAll(".sudoku td");
 
-    for (var i = 0; i < outp.length; i++) if (outp[i]) ls.push(i)
+    for (var i = 0; i < boardIncognites.length; i++) if (boardIncognites[i]) ls.push(i)
     shuffle(ls)
     //console.log(ls, outp[ls[0]])
 
-    console.log(outp.join(""))
-    outp = remove(outp, ls);
-    console.log(outp.join(""))
+    console.log(boardIncognites.join(""))
+    boardIncognites = remove(boardIncognites, ls);
+    console.log(boardIncognites.join(""))
     console.log("iterations: ", count)
     for (var i = 0; i < outt.length; i++) {
         outt[i].classList = "";
-        outt[i].innerHTML = outp[i] ? outp[i] : "";
-        outt[i].solution = puzzle[i];
-        outp[i] && outt[i].classList.add('given');
+        outt[i].innerHTML = boardIncognites[i] ? boardIncognites[i] : "";
+        outt[i].solution = boardSolution[i];
+        boardIncognites[i] && outt[i].classList.add('given');
         // outt[i].style.backgroundColor = outp[i] ? "#222" : "";
-        outt[i].contentEditable = outp[i] ? false : true;
+        outt[i].contentEditable = boardIncognites[i] ? false : true;
     }
-    console.log('Sudoku Generated:', outp.toString().replace(/,/g, ''));
+    console.log('Sudoku Generated:', boardIncognites.toString().replace(/,/g, ''));
     // loadPuzzle(savePuzzle());
 
     return {
-        board: useBoard(outp),
-        solution: useBoard(puzzle)
+        board: useBoard(boardIncognites),
+        solution: useBoard(boardSolution)
     }
 }
