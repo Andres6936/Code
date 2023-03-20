@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import {useSudoku, UseSudoku} from "../hooks/useSudoku";
 import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
@@ -20,7 +20,7 @@ interface ISudokuProvider {
 }
 
 export function SudokuProvider(props: ISudokuProvider) {
-    const sudoku = useSudoku();
+    const sudoku = useMemo(() => useSudoku(), [])
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
     return (

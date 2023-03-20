@@ -43,6 +43,10 @@ export function InputCell(props: Props) {
     }
 
     const checkInput = () => {
+        if (cell.isPresent()) {
+            sudoku.setCurrentCell(cell);
+        }
+
         if (solution && solution !== input) {
             setIsWrongNumber(true);
         }
