@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Cell} from "./Cell";
+import {InputCell} from "./InputCell";
 import {Coordinate} from "../types/Coordinate";
 import {OptionalCell} from "../types/Cell";
 import {SudokuContext} from "../context/SudokuContext";
@@ -15,19 +15,19 @@ export function Zone(props: Props) {
     return (
         <div className={"display:flex flex:col flex-grow:1 m:0.5rem"}>
             <div className={"display:flex flex:row flex-grow:1"}>
-                <Cell zone={zone} coordinate={{x: 0, y: 0}}/>
-                <Cell zone={zone} coordinate={{x: 1, y: 0}}/>
-                <Cell zone={zone} coordinate={{x: 2, y: 0}}/>
+                <InputCell zone={zone} coordinate={{x: 0, y: 0}}/>
+                <InputCell zone={zone} coordinate={{x: 1, y: 0}}/>
+                <InputCell zone={zone} coordinate={{x: 2, y: 0}}/>
             </div>
             <div className={"display:flex flex:row flex-grow:1"}>
-                <Cell zone={zone} coordinate={{x: 0, y: 1}}/>
-                <Cell zone={zone} coordinate={{x: 1, y: 1}}/>
-                <Cell zone={zone} coordinate={{x: 2, y: 1}}/>
+                <InputCell zone={zone} coordinate={{x: 0, y: 1}}/>
+                <InputCell zone={zone} coordinate={{x: 1, y: 1}}/>
+                <InputCell zone={zone} coordinate={{x: 2, y: 1}}/>
             </div>
             <div className={"display:flex flex:row flex-grow:1"}>
-                <Cell zone={zone} coordinate={{x: 0, y: 2}}/>
-                <Cell zone={zone} coordinate={{x: 1, y: 2}}/>
-                <Cell zone={zone} coordinate={{x: 2, y: 2}}/>
+                <InputCell zone={zone} coordinate={{x: 0, y: 2}}/>
+                <InputCell zone={zone} coordinate={{x: 1, y: 2}}/>
+                <InputCell zone={zone} coordinate={{x: 2, y: 2}}/>
             </div>
         </div>
     )

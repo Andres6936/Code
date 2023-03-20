@@ -8,7 +8,7 @@ interface Props {
     coordinate: Coordinate
 }
 
-export function Cell(props: Props) {
+export function InputCell(props: Props) {
     const placeholder = useZone(props.zone).getCell(props.coordinate);
 
     const [notes, setNotes] = useState();
