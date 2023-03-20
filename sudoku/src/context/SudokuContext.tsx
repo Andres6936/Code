@@ -4,8 +4,17 @@ import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
 
 interface ISudokuContext {
+    // Manager for the current board of Sudoku and the solution board
+    // of current board Sudoku.
     sudoku: UseSudoku,
+    // The current cell selected for the user, this cell can be null
+    // if the user not selected any cell or the state of application
+    // is beginning to run.
     currentCell: Optional<Cell>,
+    // Function used for change the current cell selected for the user,
+    // the use of this function produce a new render, the parameter of
+    // this function can be null for indicate that the user not has
+    // selected any cell.
     setCurrentCell: (cell: Optional<Cell>) => void
 }
 
