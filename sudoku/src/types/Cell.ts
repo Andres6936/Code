@@ -3,5 +3,3 @@ export interface Cell {
     y: number,
     value: number
 }
-
-export type OptionalCell = Cell | null

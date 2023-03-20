@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import {Coordinate} from "../types/Coordinate";
-import {OptionalCell} from "../types/Cell";
+import {Cell} from "../types/Cell";
 import {useZone} from "../hooks/useZone";
+import {Optional} from "typescript-optional";
 
 interface Props {
-    zone: OptionalCell[] | null,
+    zone: Optional<Cell>[] | null,
     coordinate: Coordinate
 }
 

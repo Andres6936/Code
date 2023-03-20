@@ -1,8 +1,9 @@
 import React, {useContext} from "react";
 import {InputCell} from "./InputCell";
 import {Coordinate} from "../types/Coordinate";
-import {OptionalCell} from "../types/Cell";
+import {Cell} from "../types/Cell";
 import {SudokuContext} from "../context/SudokuContext";
+import {Optional} from "typescript-optional";
 
 interface Props {
     coordinate: Coordinate
@@ -10,7 +11,7 @@ interface Props {
 
 export function Zone(props: Props) {
     const sudoku = useContext(SudokuContext).sudoku;
-    const zone: OptionalCell[] | null = sudoku.board.getZone(props.coordinate)
+    const zone: Optional<Cell>[] | null = sudoku.board.getZone(props.coordinate)
 
     return (
         <div className={"display:flex flex:col flex-grow:1 m:0.5rem"}>
