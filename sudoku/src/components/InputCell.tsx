@@ -8,7 +8,9 @@ import {SudokuContext} from "../context/SudokuContext";
 const EMPTY_PLACEHOLDER_VALUE = 0 as const;
 
 interface Props {
+    // The zone in the board where the cell is located
     zone: Optional<Cell>[],
+    // Coordinate relative to zone
     coordinate: Coordinate
 }
 
