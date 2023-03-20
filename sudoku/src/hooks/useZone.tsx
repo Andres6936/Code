@@ -1,38 +1,49 @@
 import {Cell} from "../types/Cell";
 import {Coordinate} from "../types/Coordinate";
-import {Optional} from "typescript-optional";
 
 export interface UseZone {
-    getCell: (coordinate: Coordinate) => Optional<Cell>
+    getCell: (coordinate: Coordinate) => Cell
 }
 
-export function useZone(zone: Optional<Cell>[]): UseZone {
+export function useZone(zone: readonly Cell[]): UseZone {
     const panic = ({x, y}: Coordinate) => {
         throw new TypeError(`The coordinate (${x}, ${y}) not exist in the Sudoku zone`)
     }
 
-    const getCell = (coordinate: Coordinate): Optional<Cell> => {
+    const getCell = (coordinate: Coordinate): Cell => {
         if (coordinate.x === 0 && coordinate.y === 0) {
-            return zone.at(0) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(0));
         } else if (coordinate.x === 1 && coordinate.y === 0) {
-            return zone.at(1) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(1));
         } else if (coordinate.x === 2 && coordinate.y === 0) {
-            return zone.at(2) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(2));
         } else if (coordinate.x === 0 && coordinate.y === 1) {
-            return zone.at(3) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(3));
         } else if (coordinate.x === 1 && coordinate.y === 1) {
-            return zone.at(4) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(4));
         } else if (coordinate.x === 2 && coordinate.y === 1) {
-            return zone.at(5) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(5));
         } else if (coordinate.x === 0 && coordinate.y === 2) {
-            return zone.at(6) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(6));
         } else if (coordinate.x === 1 && coordinate.y === 2) {
-            return zone.at(7) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(7));
         } else if (coordinate.x === 2 && coordinate.y === 2) {
-            return zone.at(8) ?? Optional.empty();
+            return getCellEmptyIfNull(zone.at(8));
         }
 
         return panic({x: coordinate.x, y: coordinate.y});
+    }
+
+    const getCellEmptyIfNull = (cell: Cell | undefined): Cell => {
+        if (cell) {
+            return cell
+        } else {
+            return {
+                x: -1,
+                y: -1,
+                value: 0
+            }
+        }
     }
 
     return {getCell}

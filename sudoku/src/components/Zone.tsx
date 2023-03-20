@@ -3,7 +3,6 @@ import {InputCell} from "./InputCell";
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
 import {SudokuContext} from "../context/SudokuContext";
-import {Optional} from "typescript-optional";
 
 interface Props {
     coordinate: Coordinate
@@ -11,7 +10,7 @@ interface Props {
 
 export function Zone(props: Props) {
     const sudoku = useContext(SudokuContext).sudoku;
-    const zone: Optional<Cell>[] = sudoku.board.getZone(props.coordinate)
+    const zone: Cell[] = sudoku.board.getZone(props.coordinate)
 
     return (
         <div className={"display:flex flex:col flex-grow:1 m:0.5rem"}>

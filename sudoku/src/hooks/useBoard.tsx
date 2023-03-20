@@ -1,12 +1,11 @@
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
 import {useDelimited} from "./useDelimited";
-import {Optional} from "typescript-optional";
 
 export interface UseBoard {
     zones: Cell[],
-    getCell: ({x, y}: Coordinate) => Optional<Cell>,
-    getZone: ({x, y}: Coordinate) => Optional<Cell>[]
+    getCell: ({x, y}: Coordinate) => Cell,
+    getZone: ({x, y}: Coordinate) => Cell[]
 }
 
 /**
@@ -20,8 +19,8 @@ export interface UseBoard {
 export function useBoard(board: readonly number[]): UseBoard {
     const zones: Cell[] = useDelimited(board);
 
-    const getCells = (coordinates: Array<[number, number]>): Optional<Cell>[] => {
-        const values: Optional<Cell>[] = []
+    const getCells = (coordinates: Array<[number, number]>): Cell[] => {
+        const values: Cell[] = []
         for (let [x, y] of coordinates) {
             values.push(getCell({x, y}))
         }
@@ -32,7 +31,7 @@ export function useBoard(board: readonly number[]): UseBoard {
         throw new TypeError(`The coordinate (${x}, ${y}) not exist in the Sudoku board`)
     }
 
-    const getZone = ({x, y}: Coordinate): Optional<Cell>[] => {
+    const getZone = ({x, y}: Coordinate): Cell[] => {
         if (x === 0 && y === 0) {
             return getCells([
                 [0, 0], [1, 0], [2, 0],
@@ -93,9 +92,12 @@ export function useBoard(board: readonly number[]): UseBoard {
     }
 
 
-    const getCell = ({x, y}: Coordinate): Optional<Cell> => {
+    const getCell = ({x, y}: Coordinate): Cell => {
         const value = zones.find(zone => zone.x === x && zone.y === y);
-        return Optional.ofNullable(value)
+        if (value) {
+            return value;
+        }
+        return panic({x, y});
     }
 
     return {zones, getZone, getCell}

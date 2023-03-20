@@ -9,14 +9,14 @@ const EMPTY_PLACEHOLDER_VALUE = 0 as const;
 
 interface Props {
     // The zone in the board where the cell is located
-    zone: Optional<Cell>[],
+    zone: Cell[],
     // Coordinate relative to zone
     coordinate: Coordinate
 }
 
 export function InputCell(props: Props) {
     const sudoku = useContext(SudokuContext);
-    const cell: Optional<Cell> = useZone(props.zone).getCell(props.coordinate);
+    const cell: Cell = useZone(props.zone).getCell(props.coordinate);
 
     const [notes, setNotes] = useState();
     const [input, setInput] = useState<number>(0);
@@ -24,7 +24,7 @@ export function InputCell(props: Props) {
     const [isWrongNumber, setIsWrongNumber] = useState<boolean>(false);
 
     const isFocusedByUser = () => {
-        return isEqual(sudoku.currentCell, cell);
+        return isEqual(sudoku.currentCell, Optional.ofNonNull(cell));
     }
 
     const getClassFocused = () => {
@@ -36,18 +36,12 @@ export function InputCell(props: Props) {
     }
 
     const getPlaceholder = (): number | string => {
-        if (cell) {
-            const placeholder = cell.map(item => item.value).orElse(EMPTY_PLACEHOLDER_VALUE);
-            return placeholder === EMPTY_PLACEHOLDER_VALUE ? '  ' : placeholder;
-        } else {
-            return '  '
-        }
+        const placeholder = cell.value;
+        return placeholder === EMPTY_PLACEHOLDER_VALUE ? '  ' : placeholder;
     }
 
     const checkInput = () => {
-        if (cell.isPresent()) {
-            sudoku.setCurrentCell(cell);
-        }
+        sudoku.setCurrentCell(Optional.ofNonNull(cell));
 
         if (solution && solution !== input) {
             setIsWrongNumber(true);
