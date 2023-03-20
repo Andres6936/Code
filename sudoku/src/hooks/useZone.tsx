@@ -2,10 +2,10 @@ import {OptionalCell} from "../types/Cell";
 import {Coordinate} from "../types/Coordinate";
 
 export interface UseZone {
-    getCell: (zone: OptionalCell[] | null, coordinate: Coordinate) => number | null
+    getCell: (coordinate: Coordinate) => number | null
 }
 
-export function useZone(zone: OptionalCell[] | null) {
+export function useZone(zone: OptionalCell[] | null): UseZone {
     const getCell = (coordinate: Coordinate): number | null => {
         if (coordinate.x === 0 && coordinate.y === 0) {
             return zone?.at(0)?.value ?? null;

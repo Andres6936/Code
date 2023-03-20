@@ -1,25 +1,26 @@
 import {Coordinate} from "../types/Coordinate";
-import {Cell, OptionalCell} from "../types/Cell";
+import {Cell} from "../types/Cell";
 import {useDelimited} from "./useDelimited";
+import {Optional} from "typescript-optional";
 
 export interface UseBoard {
     zones: Cell[],
-    getCell: ({x, y}: Coordinate) => OptionalCell,
-    getZone: ({x, y}: Coordinate) => (OptionalCell[] | null)
+    getCell: ({x, y}: Coordinate) => Optional<Cell>,
+    getZone: ({x, y}: Coordinate) => (Optional<Cell>[] | null)
 }
 
 export function useBoard(board: number[]): UseBoard {
     const zones: Cell[] = useDelimited(board);
 
-    const getCells = (coordinates: Array<[number, number]>): OptionalCell[] => {
-        const values: OptionalCell[] = []
+    const getCells = (coordinates: Array<[number, number]>): Optional<Cell>[] => {
+        const values: Optional<Cell>[] = []
         for (let [x, y] of coordinates) {
             values.push(getCell({x, y}))
         }
         return values
     }
 
-    const getZone = ({x, y}: Coordinate): OptionalCell[] | null => {
+    const getZone = ({x, y}: Coordinate): Optional<Cell>[] | null => {
         if (x === 0 && y === 0) {
             return getCells([
                 [0, 0], [1, 0], [2, 0],
@@ -80,13 +81,9 @@ export function useBoard(board: number[]): UseBoard {
     }
 
 
-
-    const getCell = ({x, y}: Coordinate): OptionalCell => {
+    const getCell = ({x, y}: Coordinate): Optional<Cell> => {
         const value = zones.find(zone => zone.x === x && zone.y === y);
-        if (value) {
-            return value
-        }
-        return null;
+        return Optional.ofNullable(value)
     }
 
     return {zones, getZone, getCell}
