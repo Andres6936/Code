@@ -9,6 +9,14 @@ export interface UseBoard {
     getZone: ({x, y}: Coordinate) => Optional<Cell>[]
 }
 
+/**
+ * Hook used for convert the one-dimension board coordinate to
+ * two-dimension board coordinate, the values in the board not
+ * will be mutated.
+ *
+ * @param board An Sudoku board, the param is an array with exactly 81
+ * elements in these, indicate each cell in the board and the value.
+ */
 export function useBoard(board: number[]): UseBoard {
     const zones: Cell[] = useDelimited(board);
 

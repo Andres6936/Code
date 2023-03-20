@@ -233,7 +233,9 @@ export function useSudoku(): UseSudoku {
     // loadPuzzle(savePuzzle());
 
     return {
+        // The board with the incognitos.
         board: useBoard(boardIncognitos),
+        // The board with the solution.
         solution: useBoard(boardSolution)
     }
 }
