@@ -37,7 +37,10 @@ interface ISudokuProvider {
 export function SudokuProvider(props: ISudokuProvider) {
     // Use of use memo for avoid generate a new sudoku each interaction
     // of user with the state global of Context.
-    const sudoku = useMemo(() => useSudoku(), [])
+    const sudoku: UseSudoku = useMemo(() => useSudoku(), [])
+
+    // The initial state of cell is null, the user not selected any cell
+    // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
     return (
