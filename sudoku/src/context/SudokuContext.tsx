@@ -19,8 +19,13 @@ interface ISudokuContext {
 }
 
 export const SudokuContext = React.createContext<ISudokuContext>({
+    // Generally the Sudoku is instanced immediately to start the application.
     sudoku: {} as UseSudoku,
+    // The initial state of cell is null, the user not selected any cell
+    // when the application start.
     currentCell: Optional.empty(),
+    // Emit a warning if the developer try use this function in the
+    // current state.
     setCurrentCell: () => console.warn("Not Implemented")
 })
 
