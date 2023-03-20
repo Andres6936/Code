@@ -30,10 +30,13 @@ export const SudokuContext = React.createContext<ISudokuContext>({
 })
 
 interface ISudokuProvider {
+    // Generally, more context or the principal content of application
     children: React.ReactNode,
 }
 
 export function SudokuProvider(props: ISudokuProvider) {
+    // Use of use memo for avoid generate a new sudoku each interaction
+    // of user with the state global of Context.
     const sudoku = useMemo(() => useSudoku(), [])
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
