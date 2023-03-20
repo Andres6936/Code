@@ -6,7 +6,7 @@ import {Optional} from "typescript-optional";
 export interface UseBoard {
     zones: Cell[],
     getCell: ({x, y}: Coordinate) => Optional<Cell>,
-    getZone: ({x, y}: Coordinate) => (Optional<Cell>[] | null)
+    getZone: ({x, y}: Coordinate) => Optional<Cell>[]
 }
 
 export function useBoard(board: number[]): UseBoard {
@@ -20,7 +20,11 @@ export function useBoard(board: number[]): UseBoard {
         return values
     }
 
-    const getZone = ({x, y}: Coordinate): Optional<Cell>[] | null => {
+    const panic = ({x, y}: Coordinate): never => {
+        throw new TypeError(`The coordinate (${x}, ${y}) not exist in the Sudoku board`)
+    }
+
+    const getZone = ({x, y}: Coordinate): Optional<Cell>[] => {
         if (x === 0 && y === 0) {
             return getCells([
                 [0, 0], [1, 0], [2, 0],
@@ -77,7 +81,7 @@ export function useBoard(board: number[]): UseBoard {
             ])
         }
 
-        return null;
+        return panic({x, y});
     }
 
 

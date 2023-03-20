@@ -11,7 +11,7 @@ interface Props {
 
 export function Zone(props: Props) {
     const sudoku = useContext(SudokuContext).sudoku;
-    const zone: Optional<Cell>[] | null = sudoku.board.getZone(props.coordinate)
+    const zone: Optional<Cell>[] = sudoku.board.getZone(props.coordinate)
 
     return (
         <div className={"display:flex flex:col flex-grow:1 m:0.5rem"}>

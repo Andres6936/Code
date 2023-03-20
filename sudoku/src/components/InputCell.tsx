@@ -8,13 +8,13 @@ import {SudokuContext} from "../context/SudokuContext";
 const EMPTY_PLACEHOLDER_VALUE = 0 as const;
 
 interface Props {
-    zone: Optional<Cell>[] | null,
+    zone: Optional<Cell>[],
     coordinate: Coordinate
 }
 
 export function InputCell(props: Props) {
     const sudoku = useContext(SudokuContext);
-    const cell = useZone(props.zone).getCell(props.coordinate);
+    const cell: Optional<Cell> = useZone(props.zone).getCell(props.coordinate);
 
     const [notes, setNotes] = useState();
     const [input, setInput] = useState<number>(0);
@@ -22,8 +22,7 @@ export function InputCell(props: Props) {
     const [isWrongNumber, setIsWrongNumber] = useState<boolean>(false);
 
     const isFocusedByUser = () => {
-        const ownCell: Optional<Cell> = cell === null ? Optional.empty() : cell;
-        return isEqual(sudoku.currentCell, ownCell);
+        return isEqual(sudoku.currentCell, cell);
     }
 
     const getClassFocused = () => {
