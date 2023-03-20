@@ -210,30 +210,30 @@ export function useSudoku(): UseSudoku {
 
     var wtf = 0;
     var ls = [];
-    var boardIncognites = mask(boardSolution);
+    var boardIncognitos = mask(boardSolution);
     var outt = document.querySelectorAll(".sudoku td");
 
-    for (var i = 0; i < boardIncognites.length; i++) if (boardIncognites[i]) ls.push(i)
+    for (var i = 0; i < boardIncognitos.length; i++) if (boardIncognitos[i]) ls.push(i)
     shuffle(ls)
     //console.log(ls, outp[ls[0]])
 
-    console.log(boardIncognites.join(""))
-    boardIncognites = remove(boardIncognites, ls);
-    console.log(boardIncognites.join(""))
+    console.log(boardIncognitos.join(""))
+    boardIncognitos = remove(boardIncognitos, ls);
+    console.log(boardIncognitos.join(""))
     console.log("iterations: ", count)
     for (var i = 0; i < outt.length; i++) {
         outt[i].classList = "";
-        outt[i].innerHTML = boardIncognites[i] ? boardIncognites[i] : "";
+        outt[i].innerHTML = boardIncognitos[i] ? boardIncognitos[i] : "";
         outt[i].solution = boardSolution[i];
-        boardIncognites[i] && outt[i].classList.add('given');
+        boardIncognitos[i] && outt[i].classList.add('given');
         // outt[i].style.backgroundColor = outp[i] ? "#222" : "";
-        outt[i].contentEditable = boardIncognites[i] ? false : true;
+        outt[i].contentEditable = boardIncognitos[i] ? false : true;
     }
-    console.log('Sudoku Generated:', boardIncognites.toString().replace(/,/g, ''));
+    console.log('Sudoku Generated:', boardIncognitos.toString().replace(/,/g, ''));
     // loadPuzzle(savePuzzle());
 
     return {
-        board: useBoard(boardIncognites),
+        board: useBoard(boardIncognitos),
         solution: useBoard(boardSolution)
     }
 }
