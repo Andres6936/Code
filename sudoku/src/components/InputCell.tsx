@@ -1,11 +1,9 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
 import {useZone} from "../hooks/useZone";
 import {Optional} from "typescript-optional";
 import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
-
-const EMPTY_PLACEHOLDER_VALUE = 0 as const;
 
 interface Props {
     // The zone in the board where the cell is located
@@ -18,23 +16,16 @@ export function InputCell(props: Props) {
     const sudoku: ISudokuContext = useContext<ISudokuContext>(SudokuContext);
     const cell: Cell = useZone(props.zone).getCell(props.coordinate);
 
-    const [notes, setNotes] = useState();
     const [input, setInput] = useState<number>(0);
     const [solution, setSolution] = useState()
-    const [isPlaceholder, setIsPlaceholder] = useState<boolean>(false);
     const [isWrongNumber, setIsWrongNumber] = useState<boolean>(false);
-
-    // Avoid the use of cell as dependency, the value only is evaluated only once
-    useEffect(() => {
-        setIsPlaceholder(cell.value !== EMPTY_PLACEHOLDER_VALUE)
-    }, [])
 
     const isFocusedByUser = () => {
         return Cell.isEqual(sudoku.currentCell, Optional.ofNonNull(cell));
     }
 
     const getClassFocused = () => {
-        if (isFocusedByUser() && !isPlaceholder) {
+        if (isFocusedByUser() && !cell.isPlaceholder()) {
             return "bg:sky-80"
         } else {
             return "bg:sky-88"
@@ -42,8 +33,7 @@ export function InputCell(props: Props) {
     }
 
     const getPlaceholder = (): number | string => {
-        const placeholder = cell.value;
-        return placeholder === EMPTY_PLACEHOLDER_VALUE ? '  ' : placeholder;
+        return cell.isPlaceholder() ? cell.value : '  '
     }
 
     const checkInput = () => {

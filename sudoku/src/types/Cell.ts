@@ -9,6 +9,10 @@ export class Cell {
     ) {
     }
 
+    public isPlaceholder(): boolean {
+        return this.placeholder;
+    }
+
     public static isEqual(origin: Optional<Cell>, target: Optional<Cell>): boolean {
         if (origin.isEmpty() || target.isEmpty()) {
             return false;
