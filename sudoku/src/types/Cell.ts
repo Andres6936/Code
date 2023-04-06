@@ -1,4 +1,5 @@
 import {Optional} from "typescript-optional";
+import {Coordinate} from "./Coordinate";
 
 export class Cell {
     public constructor(
@@ -7,6 +8,13 @@ export class Cell {
         public readonly placeholder: boolean,
         public value: number,
     ) {
+    }
+
+    public getCoordinate(): Coordinate {
+        return {
+            x: this.x,
+            y: this.y
+        }
     }
 
     public isPlaceholder(): boolean {
