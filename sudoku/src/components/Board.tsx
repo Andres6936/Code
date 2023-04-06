@@ -7,11 +7,11 @@ export function Board() {
 
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
-            console.log(event.key, 'Key')
+            if (event.key >= "1" && event.key <= "9" && context.currentCell.isPresent()) {
+                console.log('Set the value of cell', event.key)
 
-            if (context.currentCoordinateOfZone.isPresent() && context.currentCell.isPresent()) {
                 const currentCell = context.currentCell.get();
-                context.setValueOfCell(context.currentCoordinateOfZone.get(), currentCell.getCoordinate())
+                context.setValueOfCell(currentCell.getCoordinate(), 1)
             }
         }
 

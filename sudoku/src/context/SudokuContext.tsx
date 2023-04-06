@@ -27,8 +27,8 @@ export interface ISudokuContext {
     // not has selected any cell.
     setCurrentCoordinateOfZone: (coordinate: Optional<Coordinate>) => void,
     // Function used for change the value of cell in the board, is needed
-    // provider the coordinate in the board and the coordinate of cell.
-    setValueOfCell: (coordinateOfBoard: Coordinate, coordinateOfCell: Coordinate) => void,
+    // provider the coordinate of cell and the new value.
+    setValueOfCell: (coordinateOfCell: Coordinate, value: number) => void,
 }
 
 export const SudokuContext = React.createContext<ISudokuContext>({
@@ -68,10 +68,9 @@ export function SudokuProvider(props: ISudokuProvider) {
     // when the application start.
     const [currentCoordinateOfZone, setCurrentCoordinateOfZone] = useState<Optional<Coordinate>>(Optional.empty())
 
-    const setValueOfCell = (coordinateOfBoard: Coordinate, coordinateOfCell: Coordinate) => {
+    const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
         const cell = sudoku.board.getCell(coordinateOfCell);
-
-        console.log(cell, 'Cell in Board')
+        cell.value = value;
     }
 
     return (
