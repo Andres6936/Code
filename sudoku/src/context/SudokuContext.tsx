@@ -52,8 +52,7 @@ export function SudokuProvider(props: ISudokuProvider) {
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
-        const cell = sudoku.board.getCell(coordinateOfCell);
-        cell.value = value;
+        sudoku.board.setCellValueAt(coordinateOfCell, value);
         setIsUpdate(!isUpdate);
     }
 

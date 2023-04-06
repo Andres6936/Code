@@ -5,7 +5,8 @@ import {useDelimited} from "./useDelimited";
 export interface UseBoard {
     zones: Cell[],
     getCell: ({x, y}: Coordinate) => Cell,
-    getZone: ({x, y}: Coordinate) => Cell[]
+    getZone: ({x, y}: Coordinate) => Cell[],
+    setCellValueAt: (coordinate: Coordinate, value: number) => void
 }
 
 /**
@@ -100,5 +101,12 @@ export function useBoard(board: readonly number[]): UseBoard {
         return panic({x, y});
     }
 
-    return {zones, getZone, getCell}
+    const setCellValueAt = ({x, y}: Coordinate, value: number) => {
+        const cell = zones.find(zone => zone.x === x && zone.y === y);
+        if (cell) {
+            cell.value = value
+        }
+    }
+
+    return {zones, getZone, getCell, setCellValueAt}
 }
