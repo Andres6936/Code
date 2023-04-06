@@ -38,11 +38,7 @@ export function useZone(zone: readonly Cell[]): UseZone {
         if (cell) {
             return cell
         } else {
-            return {
-                x: -1,
-                y: -1,
-                value: 0
-            }
+            return new Cell(-1, -1, false, 0)
         }
     }
 

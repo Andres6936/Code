@@ -1,19 +1,23 @@
 import {Optional} from "typescript-optional";
 
-export interface Cell {
-    x: number,
-    y: number,
-    value: number
-}
-
-export function isEqual(origin: Optional<Cell>, target: Optional<Cell>) {
-    if (origin.isEmpty() || target.isEmpty()) {
-        return false;
+export class Cell {
+    public constructor(
+        public readonly x: number,
+        public readonly y: number,
+        public readonly placeholder: boolean,
+        public value: number,
+    ) {
     }
 
-    return isEqualOf(origin.get(), target.get());
-}
+    public static isEqual(origin: Optional<Cell>, target: Optional<Cell>): boolean {
+        if (origin.isEmpty() || target.isEmpty()) {
+            return false;
+        }
 
-function isEqualOf(origin: Cell, target: Cell) {
-    return origin.x === target.x && origin.y === target.y && origin.value === target.value
+        return this.isEqualOf(origin.get(), target.get());
+    }
+
+    private static isEqualOf(origin: Cell, target: Cell): boolean {
+        return origin.x === target.x && origin.y === target.y && origin.value === target.value
+    }
 }

@@ -14,11 +14,11 @@ export function useDelimited(board: readonly number[]): Cell[] {
     let axisX = 0;
     let axisY = 0;
     for (let index = 0; index < board.length; index++) {
-        zones.push({
-            x: axisX,
-            y: axisY,
-            value: board.at(index) as number
-        })
+        const value = board.at(index) as number
+        // The zero is the digit that the user should be change,
+        // the other numbers are placeholder of board.
+        const placeholder = value !== 0
+        zones.push(new Cell(axisX, axisY, placeholder, value))
         // Advance in the X-axis
         axisX += 1;
         // If reach the 9 element in the X-axis, advance in the Y-axis and

@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Coordinate} from "../types/Coordinate";
-import {Cell, isEqual} from "../types/Cell";
+import {Cell} from "../types/Cell";
 import {useZone} from "../hooks/useZone";
 import {Optional} from "typescript-optional";
 import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
@@ -30,7 +30,7 @@ export function InputCell(props: Props) {
     }, [])
 
     const isFocusedByUser = () => {
-        return isEqual(sudoku.currentCell, Optional.ofNonNull(cell));
+        return Cell.isEqual(sudoku.currentCell, Optional.ofNonNull(cell));
     }
 
     const getClassFocused = () => {
