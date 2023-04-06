@@ -6,18 +6,21 @@ export function Board() {
     const context: ISudokuContext = useContext<ISudokuContext>(SudokuContext);
 
     useEffect(() => {
+        const onKeyDown = (event: KeyboardEvent) => {
+            console.log(event.key, 'Key')
+
+            if (context.currentCoordinateOfZone.isPresent() && context.currentCell.isPresent()) {
+                console.log(context.currentCell.get().getCoordinate(), 'Cell Current')
+                context.setValueOfCell(context.currentCoordinateOfZone.get(), {x: 0, y: 0})
+            }
+        }
+
         addEventListener('keydown', onKeyDown);
 
         return () => {
             removeEventListener('keydown', onKeyDown);
         }
-    }, [])
-
-    const onKeyDown = (event: KeyboardEvent) => {
-        console.log(event.key, 'Key')
-
-        context.setValueOfCell({x: 0, y: 0}, {x: 0, y: 0})
-    }
+    }, [context])
 
     return (
         <div className="sudoku max-w:35rem my:2rem">

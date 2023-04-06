@@ -9,7 +9,9 @@ interface Props {
     // The zone in the board where the cell is located
     zone: Cell[],
     // Coordinate relative to zone
-    coordinate: Coordinate
+    coordinate: Coordinate,
+    // Coordinate of zone
+    coordinateOfZone: Coordinate
 }
 
 export function InputCell(props: Props) {
@@ -37,8 +39,8 @@ export function InputCell(props: Props) {
     }
 
     const checkInput = () => {
-        sudoku.setCurrentCell(Optional.ofNonNull(cell));
-        sudoku.setCurrentCoordinateOfZone(Optional.ofNonNull(props.coordinate));
+        sudoku.setCurrentCell(Optional.of(cell));
+        sudoku.setCurrentCoordinateOfZone(Optional.of(props.coordinateOfZone));
 
         if (solution && solution !== input) {
             setIsWrongNumber(true);
