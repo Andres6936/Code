@@ -12,20 +12,11 @@ export interface ISudokuContext {
     // if the user not selected any cell or the state of application
     // is beginning to run.
     currentCell: Optional<Cell>,
-    // The current coordinate of cell relative to zone, this coordinate
-    // can be null if the user not selected any cell or the state of
-    // application is beginning to run.
-    currentCoordinateOfZone: Optional<Coordinate>
     // Function used for change the current cell selected for the user,
     // the use of this function produce a new render, the parameter of
     // this function can be null for indicate that the user not has
     // selected any cell.
     setCurrentCell: (cell: Optional<Cell>) => void,
-    // Function used for change the current coordinate of zone selected
-    // for the user, the use of this function produce a new render, the
-    // parameter of this function can be null for indicate that the user
-    // not has selected any cell.
-    setCurrentCoordinateOfZone: (coordinate: Optional<Coordinate>) => void,
     // Function used for change the value of cell in the board, is needed
     // provider the coordinate of cell and the new value.
     setValueOfCell: (coordinateOfCell: Coordinate, value: number) => void,
@@ -37,18 +28,12 @@ export const SudokuContext = React.createContext<ISudokuContext>({
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     currentCell: Optional.empty(),
-    // The initial state of coordinate is null, the user not selected any cell
-    // when the application start.
-    currentCoordinateOfZone: Optional.empty(),
     // Emit a warning if the developer try to use this function in the
     // current state.
     setCurrentCell: () => console.warn("Not Implemented"),
     // Emit a warning if the developer try to use this function in the
     // current state.
     setValueOfCell: () => console.warn("Not Implemented"),
-    // Emit a warning if the developer try to use this function in the
-    // current state.
-    setCurrentCoordinateOfZone: () => console.warn("Not Implemented")
 })
 
 interface ISudokuProvider {
@@ -64,9 +49,6 @@ export function SudokuProvider(props: ISudokuProvider) {
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
-    // The initial state of coordinate is null, the user not selected any cell
-    // when the application start.
-    const [currentCoordinateOfZone, setCurrentCoordinateOfZone] = useState<Optional<Coordinate>>(Optional.empty())
 
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
         const cell = sudoku.board.getCell(coordinateOfCell);
@@ -78,8 +60,6 @@ export function SudokuProvider(props: ISudokuProvider) {
             sudoku,
             currentCell,
             setCurrentCell,
-            currentCoordinateOfZone,
-            setCurrentCoordinateOfZone,
             setValueOfCell,
         }}>
             {props.children}
