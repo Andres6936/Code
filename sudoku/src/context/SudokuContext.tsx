@@ -29,9 +29,11 @@ export const SudokuContext = React.createContext<ISudokuContext>({
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     currentCell: Optional.empty(),
-    // Emit a warning if the developer try use this function in the
+    // Emit a warning if the developer try to use this function in the
     // current state.
     setCurrentCell: () => console.warn("Not Implemented"),
+    // Emit a warning if the developer try to use this function in the
+    // current state.
     setValueOfCell: () => console.warn("Not Implemented"),
 })
 
