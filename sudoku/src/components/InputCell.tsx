@@ -38,6 +38,7 @@ export function InputCell(props: Props) {
 
     const checkInput = () => {
         sudoku.setCurrentCell(Optional.ofNonNull(cell));
+        sudoku.setCurrentCoordinateOfZone(Optional.ofNonNull(props.coordinate));
 
         if (solution && solution !== input) {
             setIsWrongNumber(true);
