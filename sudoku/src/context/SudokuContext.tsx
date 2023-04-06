@@ -60,7 +60,7 @@ export function SudokuProvider(props: ISudokuProvider) {
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
     const getCellAt = (coordinateOfZone: Coordinate, coordinateOfCell: Coordinate): Cell => {
-        const zone = sudoku.board.getZone(coordinateOfZone);
+        const zone: Cell[] = sudoku.board.getZone(coordinateOfZone);
         return useZone(zone).getCell(coordinateOfCell);
     }
 

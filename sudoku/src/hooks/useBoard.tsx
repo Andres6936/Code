@@ -17,7 +17,7 @@ export interface UseBoard {
  * @param board An Sudoku board, the param is an array with exactly 81
  * elements in these, indicate each cell in the board and the value.
  */
-export function useBoard(board: readonly number[]): UseBoard {
+export function useBoard(board: number[]): UseBoard {
     const zones: Cell[] = useDelimited(board);
 
     const getCells = (coordinates: Array<[number, number]>): Cell[] => {
@@ -105,6 +105,11 @@ export function useBoard(board: readonly number[]): UseBoard {
         const cell = zones.find(zone => zone.x === x && zone.y === y);
         if (cell) {
             cell.value = value
+
+            // Update the board array for reflect the change
+            const index = (y * 9) + x;
+            // Set the value in the array of 81 positions
+            board[index] = value;
         }
     }
 
