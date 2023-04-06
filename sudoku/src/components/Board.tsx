@@ -11,7 +11,7 @@ export function Board() {
                 console.log('Set the value of cell', event.key)
 
                 const currentCell = context.currentCell.get();
-                context.setValueOfCell(currentCell.getCoordinate(), 1)
+                context.setValueOfCell(currentCell.getCoordinate(), Number(event.key))
             }
         }
 
