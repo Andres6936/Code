@@ -3,7 +3,7 @@ import {Coordinate} from "../types/Coordinate";
 import {Cell, isEqual} from "../types/Cell";
 import {useZone} from "../hooks/useZone";
 import {Optional} from "typescript-optional";
-import {SudokuContext} from "../context/SudokuContext";
+import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
 
 const EMPTY_PLACEHOLDER_VALUE = 0 as const;
 
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function InputCell(props: Props) {
-    const sudoku = useContext(SudokuContext);
+    const sudoku: ISudokuContext = useContext<ISudokuContext>(SudokuContext);
     const cell: Cell = useZone(props.zone).getCell(props.coordinate);
 
     const [notes, setNotes] = useState();

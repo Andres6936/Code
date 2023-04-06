@@ -3,7 +3,7 @@ import {useSudoku, UseSudoku} from "../hooks/useSudoku";
 import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
 
-interface ISudokuContext {
+export interface ISudokuContext {
     // Manager for the current board of Sudoku and the solution board
     // of current board Sudoku.
     sudoku: UseSudoku,
