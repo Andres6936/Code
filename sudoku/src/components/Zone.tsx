@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {InputCell} from "./InputCell";
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
-import {SudokuContext} from "../context/SudokuContext";
+import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
 import {UseSudoku} from "../hooks/useSudoku";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function Zone(props: Props) {
-    const sudoku: UseSudoku = useContext(SudokuContext).sudoku;
+    const sudoku: UseSudoku = useContext<ISudokuContext>(SudokuContext).sudoku;
     const zone: Cell[] = sudoku.board.getZone(props.coordinate)
 
     return (

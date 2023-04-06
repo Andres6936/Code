@@ -1,7 +1,10 @@
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {Zone} from "./Zone";
+import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
 
 export function Board() {
+    const context: ISudokuContext = useContext<ISudokuContext>(SudokuContext);
+
     useEffect(() => {
         addEventListener('keydown', onKeyDown);
 
@@ -12,6 +15,8 @@ export function Board() {
 
     const onKeyDown = (event: KeyboardEvent) => {
         console.log(event.key, 'Key')
+
+        context.setValueOfCell({x: 0, y: 0}, {x: 0, y: 0})
     }
 
     return (

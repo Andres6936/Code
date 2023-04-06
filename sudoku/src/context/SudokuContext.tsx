@@ -2,6 +2,8 @@ import React, {useMemo, useState} from "react";
 import {useSudoku, UseSudoku} from "../hooks/useSudoku";
 import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
+import {Coordinate} from "../types/Coordinate";
+import {useZone} from "../hooks/useZone";
 
 export interface ISudokuContext {
     // Manager for the current board of Sudoku and the solution board
@@ -15,7 +17,10 @@ export interface ISudokuContext {
     // the use of this function produce a new render, the parameter of
     // this function can be null for indicate that the user not has
     // selected any cell.
-    setCurrentCell: (cell: Optional<Cell>) => void
+    setCurrentCell: (cell: Optional<Cell>) => void,
+    // Function used for change the value of cell in the board, is needed
+    // provider the coordinate in the board and the coordinate of cell.
+    setValueOfCell: (coordinateOfBoard: Coordinate, coordinateOfCell: Coordinate) => void
 }
 
 export const SudokuContext = React.createContext<ISudokuContext>({
@@ -26,7 +31,8 @@ export const SudokuContext = React.createContext<ISudokuContext>({
     currentCell: Optional.empty(),
     // Emit a warning if the developer try use this function in the
     // current state.
-    setCurrentCell: () => console.warn("Not Implemented")
+    setCurrentCell: () => console.warn("Not Implemented"),
+    setValueOfCell: () => console.warn("Not Implemented"),
 })
 
 interface ISudokuProvider {
@@ -43,11 +49,19 @@ export function SudokuProvider(props: ISudokuProvider) {
     // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
+    const setValueOfCell = (coordinateOfBoard: Coordinate, coordinateOfCell: Coordinate) => {
+        const zone = sudoku.board.getZone(coordinateOfCell);
+        const cell = useZone(zone).getCell(coordinateOfCell);
+
+        console.log(cell, 'Cell in Board')
+    }
+
     return (
         <SudokuContext.Provider value={{
             sudoku,
             currentCell,
-            setCurrentCell
+            setCurrentCell,
+            setValueOfCell,
         }}>
             {props.children}
         </SudokuContext.Provider>
