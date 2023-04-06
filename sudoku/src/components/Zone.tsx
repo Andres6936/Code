@@ -1,17 +1,16 @@
-import React, {useContext} from "react";
+import React, {useContext, useMemo} from "react";
 import {InputCell} from "./InputCell";
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
 import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
-import {UseSudoku} from "../hooks/useSudoku";
 
 interface Props {
     coordinate: Coordinate
 }
 
 export function Zone(props: Props) {
-    const sudoku: UseSudoku = useContext<ISudokuContext>(SudokuContext).sudoku;
-    const zone: Cell[] = sudoku.board.getZone(props.coordinate)
+    const sudoku: ISudokuContext = useContext<ISudokuContext>(SudokuContext);
+    const zone: Cell[] = useMemo(() => sudoku.getZoneAt(props.coordinate), [sudoku])
 
     return (
         <div className={"display:flex flex:col flex-grow:1 m:0.1rem"}>

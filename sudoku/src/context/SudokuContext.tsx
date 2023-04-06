@@ -6,9 +6,6 @@ import {Coordinate} from "../types/Coordinate";
 import {useZone} from "../hooks/useZone";
 
 export interface ISudokuContext {
-    // Manager for the current board of Sudoku and the solution board
-    // of current board Sudoku.
-    sudoku: UseSudoku,
     // The current cell selected for the user, this cell can be null
     // if the user not selected any cell or the state of application
     // is beginning to run.
@@ -19,14 +16,13 @@ export interface ISudokuContext {
     // selected any cell.
     setCurrentCell: (cell: Optional<Cell>) => void,
     getCellAt: (coordinateOfZone: Coordinate, coordinateOfCell: Coordinate) => Cell,
+    getZoneAt: (coordinate: Coordinate) => Cell[],
     // Function used for change the value of cell in the board, is needed
     // provider the coordinate of cell and the new value.
     setValueOfCell: (coordinateOfCell: Coordinate, value: number) => void,
 }
 
 export const SudokuContext = React.createContext<ISudokuContext>({
-    // Generally the Sudoku is instanced immediately to start the application.
-    sudoku: {} as UseSudoku,
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     currentCell: Optional.empty(),
@@ -39,6 +35,10 @@ export const SudokuContext = React.createContext<ISudokuContext>({
         console.warn("Not Implemented")
         return new Cell(-1, -1, false, 0);
     },
+    getZoneAt: () => {
+        console.warn("Not Implemented")
+        return []
+    },
     // Emit a warning if the developer try to use this function in the
     // current state.
     setValueOfCell: () => console.warn("Not Implemented"),
@@ -50,7 +50,10 @@ interface ISudokuProvider {
 }
 
 export function SudokuProvider(props: ISudokuProvider) {
-    // Use of use memo for avoid generate a new sudoku each interaction
+    // Manager for the current board of Sudoku and the solution board
+    // of current board Sudoku.
+    // Generally the Sudoku is instanced immediately to start the application.
+    // Use of useMemo for avoid generate a new sudoku each interaction
     // of user with the state global of Context.
     const sudoku: UseSudoku = useMemo(() => useSudoku(), [])
 
@@ -64,6 +67,10 @@ export function SudokuProvider(props: ISudokuProvider) {
         return useZone(zone).getCell(coordinateOfCell);
     }
 
+    const getZoneAt = (coordinate: Coordinate): Cell[] => {
+        return sudoku.board.getZone(coordinate);
+    }
+
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
         sudoku.board.setCellValueAt(coordinateOfCell, value);
         setIsUpdate(!isUpdate);
@@ -71,9 +78,9 @@ export function SudokuProvider(props: ISudokuProvider) {
 
     return (
         <SudokuContext.Provider value={{
-            sudoku,
             currentCell,
             getCellAt,
+            getZoneAt,
             setCurrentCell,
             setValueOfCell,
         }}>
