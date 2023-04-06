@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useMemo, useState} from "react";
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
 import {useZone} from "../hooks/useZone";
@@ -16,7 +16,18 @@ interface Props {
 
 export function InputCell(props: Props) {
     const sudoku: ISudokuContext = useContext<ISudokuContext>(SudokuContext);
-    const cell: Cell = useZone(props.zone).getCell(props.coordinate);
+
+    const cell: Cell = useMemo(
+        () => useZone(props.zone).getCell(props.coordinate),
+        [props.zone, props.coordinate, sudoku]
+    );
+
+    const value: number | string = useMemo(
+        () => {
+            const cell = useZone(props.zone).getCell(props.coordinate);
+            return cell.isPlaceholder() ? cell.value : '  ';
+        }, [props.zone, props.coordinate, sudoku]
+    );
 
     const [input, setInput] = useState<number>(0);
     const [solution, setSolution] = useState()
@@ -34,10 +45,6 @@ export function InputCell(props: Props) {
         }
     }
 
-    const getPlaceholder = (): number | string => {
-        return cell.isPlaceholder() ? cell.value : '  '
-    }
-
     const checkInput = () => {
         sudoku.setCurrentCell(Optional.of(cell));
 
@@ -53,7 +60,7 @@ export function InputCell(props: Props) {
     return (
         <div onClick={() => checkInput()}
              className={"display:flex flex-grow:1 b:2px|solid|sky-92 align-items:center justify-content:center white-space:pre-wrap " + getClassFocused()}>
-            <p className={"font:bold"}>{getPlaceholder()}</p>
+            <p className={"font:bold"}>{value}</p>
         </div>
     )
 }

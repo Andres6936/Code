@@ -46,6 +46,7 @@ export function SudokuProvider(props: ISudokuProvider) {
     // of user with the state global of Context.
     const sudoku: UseSudoku = useMemo(() => useSudoku(), [])
 
+    const [isUpdate, setIsUpdate] = useState<boolean>(false);
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
@@ -53,6 +54,7 @@ export function SudokuProvider(props: ISudokuProvider) {
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
         const cell = sudoku.board.getCell(coordinateOfCell);
         cell.value = value;
+        setIsUpdate(!isUpdate);
     }
 
     return (
