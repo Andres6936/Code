@@ -1,7 +1,6 @@
 import React, {useContext, useMemo, useState} from "react";
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
-import {useZone} from "../hooks/useZone";
 import {Optional} from "typescript-optional";
 import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
 
@@ -18,15 +17,8 @@ export function InputCell(props: Props) {
     const sudoku: ISudokuContext = useContext<ISudokuContext>(SudokuContext);
 
     const cell: Cell = useMemo(
-        () => useZone(props.zone).getCell(props.coordinate),
-        [props.zone, props.coordinate, sudoku]
-    );
-
-    const value: number | string = useMemo(
-        () => {
-            const cell = useZone(props.zone).getCell(props.coordinate);
-            return cell.isPlaceholder() ? cell.value : '  ';
-        }, [props.zone, props.coordinate, sudoku]
+        () => sudoku.getCellAt(props.coordinateOfZone, props.coordinate),
+        [props.coordinateOfZone, props.coordinate, sudoku]
     );
 
     const [input, setInput] = useState<number>(0);
@@ -60,7 +52,7 @@ export function InputCell(props: Props) {
     return (
         <div onClick={() => checkInput()}
              className={"display:flex flex-grow:1 b:2px|solid|sky-92 align-items:center justify-content:center white-space:pre-wrap " + getClassFocused()}>
-            <p className={"font:bold"}>{value}</p>
+            <p className={"font:bold"}>{cell.isPlaceholder() ? cell.value : '  '}</p>
         </div>
     )
 }

@@ -3,6 +3,7 @@ import {useSudoku, UseSudoku} from "../hooks/useSudoku";
 import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
 import {Coordinate} from "../types/Coordinate";
+import {useZone} from "../hooks/useZone";
 
 export interface ISudokuContext {
     // Manager for the current board of Sudoku and the solution board
@@ -17,6 +18,7 @@ export interface ISudokuContext {
     // this function can be null for indicate that the user not has
     // selected any cell.
     setCurrentCell: (cell: Optional<Cell>) => void,
+    getCellAt: (coordinateOfZone: Coordinate, coordinateOfCell: Coordinate) => Cell,
     // Function used for change the value of cell in the board, is needed
     // provider the coordinate of cell and the new value.
     setValueOfCell: (coordinateOfCell: Coordinate, value: number) => void,
@@ -31,6 +33,12 @@ export const SudokuContext = React.createContext<ISudokuContext>({
     // Emit a warning if the developer try to use this function in the
     // current state.
     setCurrentCell: () => console.warn("Not Implemented"),
+    // Emit a warning if the developer try to use this function in the
+    // current state.
+    getCellAt: () => {
+        console.warn("Not Implemented")
+        return new Cell(-1, -1, false, 0);
+    },
     // Emit a warning if the developer try to use this function in the
     // current state.
     setValueOfCell: () => console.warn("Not Implemented"),
@@ -51,6 +59,11 @@ export function SudokuProvider(props: ISudokuProvider) {
     // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
+    const getCellAt = (coordinateOfZone: Coordinate, coordinateOfCell: Coordinate): Cell => {
+        const zone = sudoku.board.getZone(coordinateOfZone);
+        return useZone(zone).getCell(coordinateOfCell);
+    }
+
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
         sudoku.board.setCellValueAt(coordinateOfCell, value);
         setIsUpdate(!isUpdate);
@@ -60,6 +73,7 @@ export function SudokuProvider(props: ISudokuProvider) {
         <SudokuContext.Provider value={{
             sudoku,
             currentCell,
+            getCellAt,
             setCurrentCell,
             setValueOfCell,
         }}>
