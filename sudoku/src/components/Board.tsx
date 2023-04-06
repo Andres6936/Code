@@ -10,8 +10,8 @@ export function Board() {
             console.log(event.key, 'Key')
 
             if (context.currentCoordinateOfZone.isPresent() && context.currentCell.isPresent()) {
-                console.log(context.currentCell.get().getCoordinate(), 'Cell Current')
-                context.setValueOfCell(context.currentCoordinateOfZone.get(), {x: 0, y: 0})
+                const currentCell = context.currentCell.get();
+                context.setValueOfCell(context.currentCoordinateOfZone.get(), currentCell.getCoordinate())
             }
         }
 

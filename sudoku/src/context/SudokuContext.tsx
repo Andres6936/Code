@@ -3,7 +3,6 @@ import {useSudoku, UseSudoku} from "../hooks/useSudoku";
 import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
 import {Coordinate} from "../types/Coordinate";
-import {useZone} from "../hooks/useZone";
 
 export interface ISudokuContext {
     // Manager for the current board of Sudoku and the solution board
@@ -70,8 +69,7 @@ export function SudokuProvider(props: ISudokuProvider) {
     const [currentCoordinateOfZone, setCurrentCoordinateOfZone] = useState<Optional<Coordinate>>(Optional.empty())
 
     const setValueOfCell = (coordinateOfBoard: Coordinate, coordinateOfCell: Coordinate) => {
-        const zone = sudoku.board.getZone(coordinateOfCell);
-        const cell = useZone(zone).getCell(coordinateOfCell);
+        const cell = sudoku.board.getCell(coordinateOfCell);
 
         console.log(cell, 'Cell in Board')
     }
