@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-import {useBoard} from "./useBoard";
+import {UseBoard, useBoard} from "./useBoard";
 
 export interface UseSudoku {
     solution: UseBoard;
@@ -8,7 +6,9 @@ export interface UseSudoku {
 }
 
 export function useSudoku(): UseSudoku {
-    // not what i thought it was, but keeping it here
+    let boardSolution: number[];
+
+// not what i thought it was, but keeping it here
     function normalize() {
         let row1 = boardSolution.slice(0, 9);
         for (let i = 0; i < boardSolution.length; i++) {
@@ -54,7 +54,7 @@ export function useSudoku(): UseSudoku {
         boardSolution = result;
     }
 
-    function shuffle(arr) {
+    function shuffle(arr: number[]) {
         for (var v, s = arr.length; s;) {
             v = 0 | Math.random() * s--;
             [arr[s], arr[v]] = [arr[v], arr[s]];
@@ -62,7 +62,7 @@ export function useSudoku(): UseSudoku {
     }
 
 
-    function swapRows(puz, fr, to) {
+    function swapRows(puz: number[], fr: number, to: number) {
         var a1 = fr * 9, a2 = a1 + 9, b1 = to * 9, b2 = b1 + 9;
         for (var i = 0, newp = []; i < puz.length; i++) {
             i >= a1 && i < a2 ? newp.push(puz[i - a1 + b1]) :
@@ -72,7 +72,7 @@ export function useSudoku(): UseSudoku {
         return newp;
     }
 
-    function swapCols(puz, fr, to) {
+    function swapCols(puz: number[], fr: number, to: number) {
         var fCol = [], tCol = [];
         for (var i = fr; i < fr + 81; i += 9) fCol.push(puz[i]);
         for (var i = to; i < to + 81; i += 9) tCol.push(puz[i]);
@@ -85,7 +85,7 @@ export function useSudoku(): UseSudoku {
     }
 
     // Start with a complete valid Sudoku
-    var boardSolution = [
+    boardSolution = [
         1, 6, 7, 9, 8, 5, 2, 3, 4,
         8, 4, 5, 2, 3, 1, 9, 6, 7,
         9, 3, 2, 4, 7, 6, 5, 8, 1,
@@ -129,14 +129,14 @@ export function useSudoku(): UseSudoku {
         boardSolution = Math.random() > .5 ? swapRows(boardSolution, swap[0], swap[1]) : swapCols(boardSolution, swap[0], swap[1])
     }
 
-    function* solver(board) {
+    function* solver(board: number[]) {
         const masks = [0, 1, 2, 4, 8, 16, 32, 64, 128, 256],
             rows = [0, 0, 0, 0, 0, 0, 0, 0, 0],
             cols = [0, 0, 0, 0, 0, 0, 0, 0, 0],
             blks = [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            row = n => n / 9 | 0,
-            col = n => n % 9,
-            blk = n => 3 * (n / 27 | 0) + (n % 9 / 3 | 0);
+            row = (n: number) => n / 9 | 0,
+            col = (n: number) => n % 9,
+            blk = (n: number) => 3 * (n / 27 | 0) + (n % 9 / 3 | 0);
 
         for (let i = 0; i < 81; i++) {
             const mask = masks[board[i]];
@@ -145,7 +145,7 @@ export function useSudoku(): UseSudoku {
                 blks[blk(i)] |= mask;
         }
 
-        function* solve(i) {
+        function* solve(i: number): Generator<number[]> {
             if (i === 81) return yield board;
             if (board[i] !== 0) return yield* solve(i + 1);
             const r = row(i), c = col(i), b = blk(i), used = rows[r] | cols[c] | blks[b];
@@ -169,21 +169,21 @@ export function useSudoku(): UseSudoku {
 
     var count = 0;
 
-    function mask(puzzle) {
+    function mask(puzzle: number[]): number[] {
         //console.log("Te");
-        var ct = 0,
+        let ct = 0,
             ls = [...Array(81).keys()].map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1]),
             npuzz = puzzle.slice();
         // console.log(ls)
         for (var i = 0, cnt = 40; i < cnt; i++) npuzz[ls[i]] = 0;
-        for (var sol of solver(npuzz, 0)) if (ct++, ct > 1) break;
+        for (var sol of solver(npuzz)) if (ct++, ct > 1) break;
 
         count++;
         //console.log(sol)
         return ct === 1 ? npuzz : mask(puzzle);
     }
 
-    function remove(puzzle, removals) {
+    function remove(puzzle: number[], removals: number[]): number[] {
 
         var prior = puzzle.slice();
 
@@ -194,7 +194,7 @@ export function useSudoku(): UseSudoku {
 
         // Try to Solve it
         var ct = 0;
-        for (var sol of solver(puzzle.slice(), 0)) if (ct++, ct > 1) break;
+        for (var sol of solver(puzzle.slice())) if (ct++, ct > 1) break;
 
         // If removal results in multiple solutions, undo
         if (ct !== 1) puzzle = prior;
@@ -210,8 +210,7 @@ export function useSudoku(): UseSudoku {
 
     var wtf = 0;
     var ls = [];
-    var boardIncognitos = mask(boardSolution);
-    var outt = document.querySelectorAll(".sudoku td");
+    var boardIncognitos: number[] = mask(boardSolution);
 
     for (var i = 0; i < boardIncognitos.length; i++) if (boardIncognitos[i]) ls.push(i)
     shuffle(ls)
@@ -221,14 +220,6 @@ export function useSudoku(): UseSudoku {
     boardIncognitos = remove(boardIncognitos, ls);
     console.log(boardIncognitos.join(""))
     console.log("iterations: ", count)
-    for (var i = 0; i < outt.length; i++) {
-        outt[i].classList = "";
-        outt[i].innerHTML = boardIncognitos[i] ? boardIncognitos[i] : "";
-        outt[i].solution = boardSolution[i];
-        boardIncognitos[i] && outt[i].classList.add('given');
-        // outt[i].style.backgroundColor = outp[i] ? "#222" : "";
-        outt[i].contentEditable = boardIncognitos[i] ? false : true;
-    }
     console.log('Sudoku Generated:', boardIncognitos.toString().replace(/,/g, ''));
     // loadPuzzle(savePuzzle());
 
