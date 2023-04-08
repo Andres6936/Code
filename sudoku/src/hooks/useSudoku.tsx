@@ -1,9 +1,4 @@
-import {UseBoard, useBoard} from "./useBoard";
-
-export interface UseSudoku {
-    solution: UseBoard;
-    board: UseBoard
-}
+export type UseSudoku = [number[], number[]]
 
 export function useSudoku(): UseSudoku {
     let boardSolution: number[];
@@ -223,10 +218,10 @@ export function useSudoku(): UseSudoku {
     console.log('Sudoku Generated:', boardIncognitos.toString().replace(/,/g, ''));
     // loadPuzzle(savePuzzle());
 
-    return {
+    return [
         // The board with the incognitos.
-        board: useBoard(boardIncognitos),
+        boardIncognitos,
         // The board with the solution.
-        solution: useBoard(boardSolution)
-    }
+        boardSolution
+    ]
 }

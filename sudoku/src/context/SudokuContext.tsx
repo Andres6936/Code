@@ -4,6 +4,7 @@ import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
 import {Coordinate} from "../types/Coordinate";
 import {useZone} from "../hooks/useZone";
+import {useBoard, UseBoard} from "../hooks/useBoard";
 
 export interface ISudokuContext {
     // The current cell selected for the user, this cell can be null
@@ -55,24 +56,26 @@ export function SudokuProvider(props: ISudokuProvider) {
     // Generally the Sudoku is instanced immediately to start the application.
     // Use of useMemo for avoid generate a new sudoku each interaction
     // of user with the state global of Context.
-    const sudoku: UseSudoku = useMemo(() => useSudoku(), [])
+    const [board, _]: UseSudoku = useMemo(() => useSudoku(), [])
 
     const [isUpdate, setIsUpdate] = useState<boolean>(false);
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
+    const boardHook: UseBoard = useMemo(() => useBoard(board), [board])
+
     const getCellAt = (coordinateOfZone: Coordinate, coordinateOfCell: Coordinate): Cell => {
-        const zone: Cell[] = sudoku.board.getZone(coordinateOfZone);
+        const zone: Cell[] = boardHook.getZone(coordinateOfZone);
         return useZone(zone).getCell(coordinateOfCell);
     }
 
     const getZoneAt = (coordinate: Coordinate): Cell[] => {
-        return sudoku.board.getZone(coordinate);
+        return boardHook.getZone(coordinate);
     }
 
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
-        sudoku.board.setCellValueAt(coordinateOfCell, value);
+        boardHook.setCellValueAt(coordinateOfCell, value);
         setIsUpdate(!isUpdate);
     }
 
