@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from "react";
+import React, {useContext, useMemo} from "react";
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
@@ -21,31 +21,15 @@ export function InputCell(props: Props) {
         [props.coordinateOfZone, props.coordinate, sudoku]
     );
 
-    const [input, setInput] = useState<number>(0);
-    const [solution, setSolution] = useState()
-    const [isWrongNumber, setIsWrongNumber] = useState<boolean>(false);
+    const markAsCurrentCell = () => sudoku.setCurrentCell(Optional.of(cell));
 
-    const isFocusedByUser = () => {
-        return Cell.isEqual(sudoku.currentCell, Optional.ofNonNull(cell));
-    }
+    const isFocusedByUser = (): boolean => Cell.isEqual(sudoku.currentCell, Optional.ofNonNull(cell));
 
     const getClassFocused = () => {
         if (isFocusedByUser() && !cell.isPlaceholder()) {
             return "bg:sky-80"
         } else {
             return "bg:sky-88"
-        }
-    }
-
-    const markAsCurrentCell = () => {
-        sudoku.setCurrentCell(Optional.of(cell));
-
-        if (solution && solution !== input) {
-            setIsWrongNumber(true);
-        }
-
-        if (solution && solution === input) {
-            setIsWrongNumber(false);
         }
     }
 
