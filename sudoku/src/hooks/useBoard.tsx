@@ -1,12 +1,13 @@
 import {Coordinate} from "../types/Coordinate";
 import {Cell} from "../types/Cell";
 import {useDelimited} from "./useDelimited";
+import {Optional} from "typescript-optional";
 
 export interface UseBoard {
     zones: Cell[],
     getCell: ({x, y}: Coordinate) => Cell,
     getZone: ({x, y}: Coordinate) => Cell[],
-    setCellValueAt: (coordinate: Coordinate, value: number) => void
+    setCellValueAt: (coordinate: Coordinate, value: number) => Optional<number[]>
 }
 
 /**
@@ -17,7 +18,7 @@ export interface UseBoard {
  * @param board An Sudoku board, the param is an array with exactly 81
  * elements in these, indicate each cell in the board and the value.
  */
-export function useBoard(board: number[]): UseBoard {
+export function useBoard(board: readonly number[]): UseBoard {
     const zones: Cell[] = useDelimited(board);
 
     const getCells = (coordinates: Array<[number, number]>): Cell[] => {
@@ -101,16 +102,21 @@ export function useBoard(board: number[]): UseBoard {
         return panic({x, y});
     }
 
-    const setCellValueAt = ({x, y}: Coordinate, value: number) => {
+    const setCellValueAt = ({x, y}: Coordinate, value: number): Optional<number[]> => {
         const cell = zones.find(zone => zone.x === x && zone.y === y);
         if (cell) {
             cell.value = value
 
+            const mutationBoard = [...board];
             // Update the board array for reflect the change
             const index = (y * 9) + x;
             // Set the value in the array of 81 positions
-            board[index] = value;
+            mutationBoard[index] = value;
+            // Return the array updated
+            return Optional.of(mutationBoard);
         }
+
+        return Optional.empty();
     }
 
     return {zones, getZone, getCell, setCellValueAt}

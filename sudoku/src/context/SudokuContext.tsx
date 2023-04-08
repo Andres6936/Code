@@ -56,9 +56,9 @@ export function SudokuProvider(props: ISudokuProvider) {
     // Generally the Sudoku is instanced immediately to start the application.
     // Use of useMemo for avoid generate a new sudoku each interaction
     // of user with the state global of Context.
-    const [board, _]: UseSudoku = useMemo(() => useSudoku(), [])
+    const [boardRaw, _]: UseSudoku = useMemo(() => useSudoku(), [])
 
-    const [isUpdate, setIsUpdate] = useState<boolean>(false);
+    const [board, setBoard] = useState<number[]>(boardRaw);
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
@@ -75,8 +75,10 @@ export function SudokuProvider(props: ISudokuProvider) {
     }
 
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
-        boardHook.setCellValueAt(coordinateOfCell, value);
-        setIsUpdate(!isUpdate);
+        const mutationBoard: Optional<number[]> = boardHook.setCellValueAt(coordinateOfCell, value);
+        if (mutationBoard.isPresent()) {
+            setBoard(mutationBoard.get());
+        }
     }
 
     return (
