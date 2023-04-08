@@ -157,15 +157,15 @@ function loadPuzzle(str2: string) {
         console.error("ERROR:", "Compression code cannot be final frame in sequence.");
     }
     if (err > 0) {
-        input.style.border = "1px solid red";
+        // input.style.border = "1px solid red";
         //input.style.background = "#FFF7F7";
         return false;
     } else {
-        input.style.border = "";
+        // input.style.border = "";
         //input.style.background = "";
     }
-    info.innerHTML = "puzzHash: <code>" + cksm(arr).toString(36) + "</code>";
-    for (var i = k = 0, t, y; i < 81; i++, k++) {
+    // info.innerHTML = "puzzHash: <code>" + cksm(arr).toString(36) + "</code>";
+    for (var i = 0, k = 0, t, y; i < 81; i++, k++) {
         switch (data[k]) {
             case 0xA:
                 y = 1;
@@ -195,16 +195,16 @@ function loadPuzzle(str2: string) {
                 y = 0;
                 t = 0;
         }
-        for (j = 0; j < t; j++, i++) tbl[i].innerHTML = "";
+        for (let j = 0; j < t; j++, i++) tbl[i].innerHTML = "";
         k += y;
 
         tbl[i].innerHTML = data[k] ? data[k] : "";
     }
-    input.value = str2;
+    // input.value = str2;
 }
 
 function savePuzzle() {
-    for (var i = j = 0, data = []; i < tbl.length; i++) {
+    for (var i = 0, j = 0, data = []; i < tbl.length; i++) {
         var c = parseInt(tbl[i].textContent) || "";
         if (c === "") j++;
         else {
@@ -237,6 +237,7 @@ function savePuzzle() {
     var packed = [];
     for (var i = 0, len = data.length; i < len; i += 2) {
         var b = (i !== len - 1) ? data[i + 1] : 0; // 0 for missing nibble
+        // @ts-ignore
         packed.push((data[i] << 4) + b);
     }
 
