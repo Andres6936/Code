@@ -85,7 +85,7 @@ function loadPuzzle(str2: string) {
         console.error("ERROR:", "Data checksum is invalid.");
     }
     // check data
-    for (var t = 0, i = 0, last; i < data.length; i++) {
+    for (var t = 0, i = 0, last = 0; i < data.length; i++) {
         var c = data[i];
         // Check code 15 ----------------------------------------------------------
         if (c === 15 && data[i + 1] !== undefined && data[i + 2] !== undefined) {
@@ -165,7 +165,7 @@ function loadPuzzle(str2: string) {
         //input.style.background = "";
     }
     // info.innerHTML = "puzzHash: <code>" + cksm(arr).toString(36) + "</code>";
-    for (var i = 0, k = 0, t, y; i < 81; i++, k++) {
+    for (var i = 0, k = 0, t = 0, y; i < 81; i++, k++) {
         switch (data[k]) {
             case 0xA:
                 y = 1;
@@ -204,6 +204,7 @@ function loadPuzzle(str2: string) {
 }
 
 function savePuzzle() {
+    const tbl: any[] = []
     for (var i = 0, j = 0, data = []; i < tbl.length; i++) {
         var c = parseInt(tbl[i].textContent) || "";
         if (c === "") j++;
