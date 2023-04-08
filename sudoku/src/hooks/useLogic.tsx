@@ -1,6 +1,5 @@
-// @ts-nocheck
 
-function bmap(val, mode = 0) {
+function bmap(val: string | any[], mode = 0) {
     var i, data = mode ? [...val].map(a => a.charCodeAt()) : val.slice(),
         tbl = [
             0x22, 0x26, 0x27, 0x3C, 0x3E, 0xB8, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
@@ -11,16 +10,20 @@ function bmap(val, mode = 0) {
         ];
     for (i = 0; i < val.length; i++) {
         var idx = tbl.indexOf(data[i]);
-        if (mode ? data[i] > 255 : idx > -1) data[i] = mode ? tbl[data[i] - 0x100] : 0x100 + idx;
+        if (mode ? data[i] > 255 : idx > -1) {
+            // @ts-ignore
+            data[i] = mode ? tbl[data[i] - 0x100] : 0x100 + idx;
+        }
     }
+    // @ts-ignore
     return mode ? data : String.fromCharCode.apply(0, data);
 }
 
-const arst = a => {
+const arst = (a: any) => {
     return a.trim ? [...a].map(a => a.charCodeAt()) : String.fromCharCode.apply(0, a)
 }
 
-function cksm(d) {
+function cksm(d: string | any[]) {
     let s;
     for (var i = s = 0; i < d.length; ++i) s += (s << 1) + d[i];
     s ^= s << 9;
@@ -28,7 +31,7 @@ function cksm(d) {
     return s >>> 0
 }
 
-function eee(r, e) {
+function eee(r: number[], e: number[]) {
     for (var n, f = [], o = 0, t = [], h = 0; 256 > h; h++) f[h] = h;
     for (h = 0; 256 > h; h++) o = (o + f[h] + e[h % e.length]) % 256, n = f[h], f[h] = f[o], f[o] = n;
     h = 0, o = 0;
@@ -36,12 +39,12 @@ function eee(r, e) {
     return t
 }
 
-var crc8 = function (data) {
-    for (var i = 256, tbl = [], crc, j; i--; tbl[i] = crc & 0xFF) {
+const crc8 = function (data) {
+    for (var i = 256, tbl: number[] = [], crc, j; i--; tbl[i] = crc & 0xFF) {
         j = 8;
         for (crc = i; j--;) crc = crc & 128 ? (crc << 1) ^ 0x5a : crc << 1;
     }
-    return function (data) {
+    return function (data: number[]) {
         for (var i = 0, crc = 0; i < data.length; ++i)
             crc = tbl[(crc ^ data[i]) % 256];
         return crc;
@@ -61,6 +64,7 @@ function loadPuzzle(str2: string) {
     // console.log(arr)
     //var arr = arrstr(str);
 
+    // @ts-ignore
     arr = [arr[0]].concat(eee(arr.slice(1), [arr[0]]));
     var hex = Array.prototype.map.call(arr, x => ('00' + x.toString(16).toUpperCase()).slice(-2)).join(' ');
     //   console.log(arr.length, hex);
@@ -147,6 +151,7 @@ function loadPuzzle(str2: string) {
             break;
         }
     }
+    // @ts-ignore
     if ((last > 9 && last < 16)) {
         err++;
         console.error("ERROR:", "Compression code cannot be final frame in sequence.");
@@ -237,39 +242,41 @@ function savePuzzle() {
 
     var crc = crc8(packed);
     var output = [crc].concat(eee(packed, [crc]));
+    // @ts-ignore
     return btoa(arst(output)).replace(/=/g, "");
 }
 
 
 function onLoad() {
+    const input = document.querySelector("input#c0de") as HTMLInputElement;
 
-    var input = document.querySelector("input#c0de");
+    if (input) {
+        input.oninput = function () {
 
+            if (input.value.length === 81) {
+                for (var packed: number[] = [], i = 0; i < 81; i += 2) {
+                    const num1 = Number(input.value[i]);
+                    const num2 = Number(input.value[i + 1]);
 
-    input.oninput = function () {
+                    let digit = 0;
+                    if (num1 >= 1 && num1 <= 9) digit += num1 << 4;
+                    if (num2 >= 1 && num2 <= 9) digit += num2;
+                    packed.push(digit);
+                }
+                const crc: number = crc8(packed);
+                const output: number[] = [crc].concat(eee(packed, [crc]));
+                console.log(output);
+                // @ts-ignore
+                loadPuzzle(btoa(arst(output)).replace(/=/g, ""));
 
-        if (input.value.length === 81) {
-            for (var packed = [], i = 0; i < 81; i += 2) {
-                var num1 = Number(input.value[i]);
-                var num2 = Number(input.value[i + 1]);
-
-                var digit = 0;
-                if (num1 >= 1 && num1 <= 9) digit += num1 << 4;
-                if (num2 >= 1 && num2 <= 9) digit += num2;
-                packed.push(digit);
+            } else {
+                loadPuzzle(input.value);
             }
-            var crc = crc8(packed);
-            var output = [crc].concat(eee(packed, [crc]))
-            console.log(output);
-            loadPuzzle(btoa(arst(output)).replace(/=/g, ""));
+            //var b64 = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}|[A-Za-z0-9+/]{2})$/;
+            //if(b64.test(input.value))
 
-        } else {
-            loadPuzzle(input.value);
-        }
-        //var b64 = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}|[A-Za-z0-9+/]{2})$/;
-        //if(b64.test(input.value))
-
-    };
-};
+        };
+    }
+}
 
 export {};
