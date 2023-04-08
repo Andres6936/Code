@@ -195,10 +195,10 @@ function loadPuzzle(str2: string) {
                 y = 0;
                 t = 0;
         }
-        for (let j = 0; j < t; j++, i++) tbl[i].innerHTML = "";
+        // for (let j = 0; j < t; j++, i++) tbl[i].innerHTML = "";
         k += y;
 
-        tbl[i].innerHTML = data[k] ? data[k] : "";
+        // tbl[i].innerHTML = data[k] ? data[k] : "";
     }
     // input.value = str2;
 }
