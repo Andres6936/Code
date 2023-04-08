@@ -8,8 +8,6 @@ export function Board() {
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
             if (event.key >= "1" && event.key <= "9" && context.currentCell.isPresent()) {
-                console.log('Set the value of cell', event.key)
-
                 const currentCell = context.currentCell.get();
                 context.setValueOfCell(currentCell.getCoordinate(), Number(event.key))
             }
