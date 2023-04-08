@@ -58,26 +58,24 @@ export function SudokuProvider(props: ISudokuProvider) {
     // of user with the state global of Context.
     const [boardRaw, _]: UseSudoku = useMemo(() => useSudoku(), [])
 
-    const [board, setBoard] = useState<number[]>(boardRaw);
+    const [board, setBoard] = useState<UseBoard>(useBoard(boardRaw));
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
 
-    const boardHook: UseBoard = useMemo(() => useBoard(board), [board])
-
     const getCellAt = (coordinateOfZone: Coordinate, coordinateOfCell: Coordinate): Cell => {
-        const zone: Cell[] = boardHook.getZone(coordinateOfZone);
+        const zone: Cell[] = board.getZone(coordinateOfZone);
         return useZone(zone).getCell(coordinateOfCell);
     }
 
     const getZoneAt = (coordinate: Coordinate): Cell[] => {
-        return boardHook.getZone(coordinate);
+        return board.getZone(coordinate);
     }
 
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
-        const mutationBoard: Optional<number[]> = boardHook.setCellValueAt(coordinateOfCell, value);
-        if (mutationBoard.isPresent()) {
-            setBoard(mutationBoard.get());
+        const cells: Optional<Cell[]> = board.setCellValueAt(coordinateOfCell, value);
+        if (cells.isPresent()) {
+            setBoard(useBoard(boardRaw, cells.get()));
         }
     }
 

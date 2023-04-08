@@ -7,7 +7,7 @@ export interface UseBoard {
     zones: Cell[],
     getCell: ({x, y}: Coordinate) => Cell,
     getZone: ({x, y}: Coordinate) => Cell[],
-    setCellValueAt: (coordinate: Coordinate, value: number) => Optional<number[]>
+    setCellValueAt: (coordinate: Coordinate, value: number) => Optional<Cell[]>
 }
 
 /**
@@ -17,9 +17,11 @@ export interface UseBoard {
  *
  * @param board An Sudoku board, the param is an array with exactly 81
  * elements in these, indicate each cell in the board and the value.
+ *
+ * @param zonesDefault Generally is used for update the state of UI.
  */
-export function useBoard(board: readonly number[]): UseBoard {
-    const zones: Cell[] = useDelimited(board);
+export function useBoard(board: readonly number[], zonesDefault: Cell[] = []): UseBoard {
+    const zones: Cell[] = zonesDefault.length > 0 ? zonesDefault : useDelimited(board);
 
     const getCells = (coordinates: Array<[number, number]>): Cell[] => {
         const values: Cell[] = []
@@ -102,18 +104,12 @@ export function useBoard(board: readonly number[]): UseBoard {
         return panic({x, y});
     }
 
-    const setCellValueAt = ({x, y}: Coordinate, value: number): Optional<number[]> => {
+    const setCellValueAt = ({x, y}: Coordinate, value: number): Optional<Cell[]> => {
         const cell = zones.find(zone => zone.x === x && zone.y === y);
         if (cell) {
             cell.value = value
 
-            const mutationBoard = [...board];
-            // Update the board array for reflect the change
-            const index = (y * 9) + x;
-            // Set the value in the array of 81 positions
-            mutationBoard[index] = value;
-            // Return the array updated
-            return Optional.of(mutationBoard);
+            return Optional.of(zones);
         }
 
         return Optional.empty();
