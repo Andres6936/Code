@@ -4,7 +4,7 @@ import {useDelimited} from "./useDelimited";
 import {Optional} from "typescript-optional";
 
 export interface UseBoard {
-    zones: Cell[],
+    isFill: () => boolean,
     getCell: ({x, y}: Coordinate) => Cell,
     getZone: ({x, y}: Coordinate) => Cell[],
     setCellValueAt: (coordinate: Coordinate, value: number) => Optional<Cell[]>
@@ -30,6 +30,8 @@ export function useBoard(board: readonly number[], zonesDefault: Cell[] = []): U
         }
         return values
     }
+
+    const isFill = (): boolean => zones.every(cell => cell.value !== 0)
 
     const panic = ({x, y}: Coordinate): never => {
         throw new TypeError(`The coordinate (${x}, ${y}) not exist in the Sudoku board`)
@@ -115,5 +117,5 @@ export function useBoard(board: readonly number[], zonesDefault: Cell[] = []): U
         return Optional.empty();
     }
 
-    return {zones, getZone, getCell, setCellValueAt}
+    return {isFill, getZone, getCell, setCellValueAt}
 }
