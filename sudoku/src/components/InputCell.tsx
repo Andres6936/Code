@@ -37,7 +37,7 @@ export function InputCell(props: Props) {
         }
     }
 
-    const checkInput = () => {
+    const markAsCurrentCell = () => {
         sudoku.setCurrentCell(Optional.of(cell));
 
         if (solution && solution !== input) {
@@ -49,10 +49,23 @@ export function InputCell(props: Props) {
         }
     }
 
+    const getPlaceholderOrValueByUser = () => {
+        if (cell.isPlaceholder()) {
+            return <p className={"font:bold"}>{cell.value}</p>
+        } else {
+            // Handle the case of input for the user
+            if (cell.value === 0) {
+                return <p className={"font:italic"}>{'  '}</p>
+            } else {
+                return <p className={"font:italic"}>{cell.value}</p>
+            }
+        }
+    }
+
     return (
-        <div onClick={() => checkInput()}
+        <div onClick={() => markAsCurrentCell()}
              className={"display:flex flex-grow:1 b:2px|solid|sky-92 align-items:center justify-content:center white-space:pre-wrap " + getClassFocused()}>
-            <p className={"font:bold"}>{cell.isPlaceholder() ? cell.value : '  '}</p>
+            {getPlaceholderOrValueByUser()}
         </div>
     )
 }
