@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useSudoku, UseSudoku} from "../hooks/useSudoku";
 import {Cell} from "../types/Cell";
 import {Optional} from "typescript-optional";
@@ -62,6 +62,12 @@ export function SudokuProvider(props: ISudokuProvider) {
     // The initial state of cell is null, the user not selected any cell
     // when the application start.
     const [currentCell, setCurrentCell] = useState<Optional<Cell>>(Optional.empty())
+
+    useEffect(() => {
+        if (board.isFill()) {
+            // Validate the solution of board
+        }
+    }, [board])
 
     const getCellAt = (coordinateOfZone: Coordinate, coordinateOfCell: Coordinate): Cell => {
         const zone: Cell[] = board.getZone(coordinateOfZone);
