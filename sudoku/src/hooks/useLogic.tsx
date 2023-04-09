@@ -9,7 +9,7 @@ function bmap(val: string | any[], mode = 0) {
             0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xAD
         ];
     for (i = 0; i < val.length; i++) {
-        var idx = tbl.indexOf(data[i]);
+        const idx = tbl.indexOf(data[i]);
         if (mode ? data[i] > 255 : idx > -1) {
             // @ts-ignore
             data[i] = mode ? tbl[data[i] - 0x100] : 0x100 + idx;
@@ -31,7 +31,7 @@ function cksm(d: string | any[]) {
     return s >>> 0
 }
 
-function eee(r: number[], e: number[]) {
+export function eee(r: number[], e: number[]) {
     for (var n, f = [], o = 0, t = [], h = 0; 256 > h; h++) f[h] = h;
     for (h = 0; 256 > h; h++) o = (o + f[h] + e[h % e.length]) % 256, n = f[h], f[h] = f[o], f[o] = n;
     h = 0, o = 0;
@@ -39,7 +39,7 @@ function eee(r: number[], e: number[]) {
     return t
 }
 
-const crc8 = function (data) {
+export const crc8 = function (data) {
     for (var i = 256, tbl: number[] = [], crc, j; i--; tbl[i] = crc & 0xFF) {
         j = 8;
         for (crc = i; j--;) crc = crc & 128 ? (crc << 1) ^ 0x5a : crc << 1;
@@ -51,7 +51,9 @@ const crc8 = function (data) {
     }
 }();
 
-function loadPuzzle(str2: string) {
+export function loadPuzzle(str2: string) {
+    debugger
+
     if (!str2) {
         return
     }
@@ -70,9 +72,9 @@ function loadPuzzle(str2: string) {
     //   console.log(arr.length, hex);
     // load nibble-frames into data array
     for (var i = 1, data = [], sum, sum2; i < arr.length; i++) {
-        var byte = arr[i];
-        var nib1 = (byte & 0xF0) >> 4
-        var nib2 = byte & 0x0F;
+        const byte = arr[i];
+        const nib1 = (byte & 0xF0) >> 4;
+        const nib2 = byte & 0x0F;
         data.push(nib1);
         // if the last nibble is 0, skip it (for odd nibble counts)
         if (i === arr.length - 1 && nib2 === 0) break;
@@ -86,7 +88,7 @@ function loadPuzzle(str2: string) {
     }
     // check data
     for (var t = 0, i = 0, last = 0; i < data.length; i++) {
-        var c = data[i];
+        const c = data[i];
         // Check code 15 ----------------------------------------------------------
         if (c === 15 && data[i + 1] !== undefined && data[i + 2] !== undefined) {
             var digit = (data[i + 1] << 4) + data[i + 2];
@@ -246,39 +248,6 @@ function savePuzzle() {
     var output = [crc].concat(eee(packed, [crc]));
     // @ts-ignore
     return btoa(arst(output)).replace(/=/g, "");
-}
-
-
-function onLoad() {
-    const input = document.querySelector("input#c0de") as HTMLInputElement;
-
-    if (input) {
-        input.oninput = function () {
-
-            if (input.value.length === 81) {
-                for (var packed: number[] = [], i = 0; i < 81; i += 2) {
-                    const num1 = Number(input.value[i]);
-                    const num2 = Number(input.value[i + 1]);
-
-                    let digit = 0;
-                    if (num1 >= 1 && num1 <= 9) digit += num1 << 4;
-                    if (num2 >= 1 && num2 <= 9) digit += num2;
-                    packed.push(digit);
-                }
-                const crc: number = crc8(packed);
-                const output: number[] = [crc].concat(eee(packed, [crc]));
-                console.log(output);
-                // @ts-ignore
-                loadPuzzle(btoa(arst(output)).replace(/=/g, ""));
-
-            } else {
-                loadPuzzle(input.value);
-            }
-            //var b64 = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}|[A-Za-z0-9+/]{2})$/;
-            //if(b64.test(input.value))
-
-        };
-    }
 }
 
 export {};
