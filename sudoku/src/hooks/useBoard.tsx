@@ -5,6 +5,7 @@ import {Optional} from "typescript-optional";
 
 export interface UseBoard {
     isFill: () => boolean,
+    isValid: (solution: readonly number[]) => boolean
     getCell: ({x, y}: Coordinate) => Cell,
     getZone: ({x, y}: Coordinate) => Cell[],
     setCellValueAt: (coordinate: Coordinate, value: number) => Optional<Cell[]>
@@ -29,6 +30,27 @@ export function useBoard(board: readonly number[], zonesDefault: Cell[] = []): U
             values.push(getCell({x, y}))
         }
         return values
+    }
+
+    const getValueCellAt = (board: readonly number[], x: number, y: number): number => {
+        // Get the index of cell in the one dimensional array that
+        // represent the board with the values of solution.
+        const index: number = (y * 9) + x;
+        const value = board.at(index)
+        if (value) {
+            return value
+        }
+        return panic({x, y});
+    }
+
+    const isValid = (solution: readonly number[]): boolean => {
+        for (let cell of zones) {
+            const solutionValue = getValueCellAt(solution, cell.x, cell.y);
+            if (cell.value !== solutionValue) {
+                return false
+            }
+        }
+        return true;
     }
 
     const isFill = (): boolean => zones.every(cell => cell.value !== 0)
@@ -117,5 +139,5 @@ export function useBoard(board: readonly number[], zonesDefault: Cell[] = []): U
         return Optional.empty();
     }
 
-    return {isFill, getZone, getCell, setCellValueAt}
+    return {isFill, isValid, getZone, getCell, setCellValueAt}
 }

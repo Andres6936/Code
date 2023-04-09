@@ -56,7 +56,7 @@ export function SudokuProvider(props: ISudokuProvider) {
     // Generally the Sudoku is instanced immediately to start the application.
     // Use of useMemo for avoid generate a new sudoku each interaction
     // of user with the state global of Context.
-    const [boardRaw, _]: UseSudoku = useMemo(() => useSudoku(), [])
+    const [boardRaw, solutionRaw]: UseSudoku = useMemo(() => useSudoku(), [])
 
     const [board, setBoard] = useState<UseBoard>(useBoard(boardRaw));
     // The initial state of cell is null, the user not selected any cell
@@ -65,7 +65,11 @@ export function SudokuProvider(props: ISudokuProvider) {
 
     useEffect(() => {
         if (board.isFill()) {
-            // Validate the solution of board
+            if (board.isValid(solutionRaw)) {
+                console.log("Yes!!!, Valid Solution")
+            } else {
+                console.log("Oppss!!! Not valid")
+            }
         }
     }, [board])
 
