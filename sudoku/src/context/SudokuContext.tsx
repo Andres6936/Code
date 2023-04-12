@@ -5,6 +5,7 @@ import {Optional} from "typescript-optional";
 import {Coordinate} from "../types/Coordinate";
 import {useZone} from "../hooks/useZone";
 import {useBoard, UseBoard} from "../hooks/useBoard";
+import {useSave} from "../hooks/useSave";
 
 export interface ISudokuContext {
     // The current cell selected for the user, this cell can be null
@@ -18,6 +19,7 @@ export interface ISudokuContext {
     setCurrentCell: (cell: Optional<Cell>) => void,
     getCellAt: (coordinateOfZone: Coordinate, coordinateOfCell: Coordinate) => Cell,
     getZoneAt: (coordinate: Coordinate) => Cell[],
+    getHashBoard: () => string,
     // Function used for change the value of cell in the board, is needed
     // provider the coordinate of cell and the new value.
     setValueOfCell: (coordinateOfCell: Coordinate, value: number) => void,
@@ -39,6 +41,10 @@ export const SudokuContext = React.createContext<ISudokuContext>({
     getZoneAt: () => {
         console.warn("Not Implemented")
         return []
+    },
+    getHashBoard: () => {
+        console.warn("Not Implemented")
+      return "";
     },
     // Emit a warning if the developer try to use this function in the
     // current state.
@@ -82,6 +88,10 @@ export function SudokuProvider(props: ISudokuProvider) {
         return board.getZone(coordinate);
     }
 
+    const getHashBoard = () => {
+        return useSave(boardRaw)
+    }
+
     const setValueOfCell = (coordinateOfCell: Coordinate, value: number) => {
         const cells: Optional<Cell[]> = board.setCellValueAt(coordinateOfCell, value);
         if (cells.isPresent()) {
@@ -94,6 +104,7 @@ export function SudokuProvider(props: ISudokuProvider) {
             currentCell,
             getCellAt,
             getZoneAt,
+            getHashBoard,
             setCurrentCell,
             setValueOfCell,
         }}>

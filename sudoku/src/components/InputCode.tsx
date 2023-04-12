@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {crc8, eee, loadPuzzle} from "../hooks/useLogic";
+import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
 
 export function InputCode() {
-    const [puzzleCode, setPuzzleCode] = useState<string>('')
+    const sudoku = useContext<ISudokuContext>(SudokuContext)
+    const [puzzleCode, setPuzzleCode] = useState<string>(sudoku.getHashBoard())
 
     useEffect(() => {
         if (puzzleCode.length === 81) {
