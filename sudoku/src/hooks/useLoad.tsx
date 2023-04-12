@@ -1,4 +1,4 @@
-import { arst, crc8, eee } from "./useLogic";
+import {arst, crc8, eee} from "./useLogic";
 
 export function useLoad(str2: string) {
     if (!str2) {
@@ -113,6 +113,9 @@ export function useLoad(str2: string) {
         // input.style.border = "";
         //input.style.background = "";
     }
+
+    const board = new Array(81);
+
     // info.innerHTML = "puzzHash: <code>" + cksm(arr).toString(36) + "</code>";
     for (var i = 0, k = 0, t = 0, y; i < 81; i++, k++) {
         switch (data[k]) {
@@ -144,10 +147,14 @@ export function useLoad(str2: string) {
                 y = 0;
                 t = 0;
         }
-        // for (let j = 0; j < t; j++, i++) tbl[i].innerHTML = "";
+        for (let j = 0; j < t; j++, i++) {
+            board[i] = 0;
+        }
+
         k += y;
 
-        // tbl[i].innerHTML = data[k] ? data[k] : "";
+        board[i] = data[k] ? data[k] : 0
     }
-    // input.value = str2;
+
+    return {board: board, hash: str2}
 }
