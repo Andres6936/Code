@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {crc8, eee} from "../hooks/useLogic";
 import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
-import {useLoad} from "../hooks/useLoad";
 
 export function InputCode() {
     const sudoku = useContext<ISudokuContext>(SudokuContext)
@@ -22,10 +21,10 @@ export function InputCode() {
             const output: number[] = [crc].concat(eee(packed, [crc]));
             console.log(output);
             // @ts-ignore
-            useLoad(btoa(arst(output)).replace(/=/g, ""));
+            sudoku.loadBoardByHash(btoa(arst(output)).replace(/=/g, ""));
 
         } else {
-            useLoad(puzzleCode);
+            sudoku.loadBoardByHash(puzzleCode);
         }
     }, [puzzleCode])
 

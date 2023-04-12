@@ -6,6 +6,7 @@ import {Coordinate} from "../types/Coordinate";
 import {useZone} from "../hooks/useZone";
 import {useBoard, UseBoard} from "../hooks/useBoard";
 import {useSave} from "../hooks/useSave";
+import {useLoad} from "../hooks/useLoad";
 
 export interface ISudokuContext {
     // The current cell selected for the user, this cell can be null
@@ -23,6 +24,7 @@ export interface ISudokuContext {
     // Function used for change the value of cell in the board, is needed
     // provider the coordinate of cell and the new value.
     setValueOfCell: (coordinateOfCell: Coordinate, value: number) => void,
+    loadBoardByHash: (hashByUser: string) => void
 }
 
 export const SudokuContext = React.createContext<ISudokuContext>({
@@ -49,6 +51,7 @@ export const SudokuContext = React.createContext<ISudokuContext>({
     // Emit a warning if the developer try to use this function in the
     // current state.
     setValueOfCell: () => console.warn("Not Implemented"),
+    loadBoardByHash: () => console.warn("Not Implemented"),
 })
 
 interface ISudokuProvider {
@@ -99,6 +102,17 @@ export function SudokuProvider(props: ISudokuProvider) {
         }
     }
 
+    const loadBoardByHash = (hashByUser: string) => {
+        const {board, hash} = useLoad(hashByUser);
+        // The hash generated for the board and the hash provider for the
+        // user must be the same.
+        if (hashByUser === hash) {
+            setBoard(useBoard(board))
+        } else {
+            console.error("The comprobation of hash has been failed, not are equals")
+        }
+    }
+
     return (
         <SudokuContext.Provider value={{
             currentCell,
@@ -107,6 +121,7 @@ export function SudokuProvider(props: ISudokuProvider) {
             getHashBoard,
             setCurrentCell,
             setValueOfCell,
+            loadBoardByHash,
         }}>
             {props.children}
         </SudokuContext.Provider>

@@ -1,8 +1,13 @@
 import {arst, crc8, eee} from "./useLogic";
 
-export function useLoad(str2: string) {
+export interface HookUseLoad {
+    board: number[],
+    hash: string
+}
+
+export function useLoad(str2: string): HookUseLoad {
     if (!str2) {
-        return
+        // return
     }
     //   console.log(arst(str2) );
     // decode base64 to string
@@ -108,13 +113,13 @@ export function useLoad(str2: string) {
     if (err > 0) {
         // input.style.border = "1px solid red";
         //input.style.background = "#FFF7F7";
-        return false;
+        // return false;
     } else {
         // input.style.border = "";
         //input.style.background = "";
     }
 
-    const board = new Array(81);
+    const board: number[] = new Array(81);
 
     // info.innerHTML = "puzzHash: <code>" + cksm(arr).toString(36) + "</code>";
     for (var i = 0, k = 0, t = 0, y; i < 81; i++, k++) {
