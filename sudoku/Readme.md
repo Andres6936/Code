@@ -21,5 +21,5 @@ puzzle game. It provides players with hours of entertainment and is perfect
 for anyone who enjoys a good mental challenge.
 
 <p align="center">
-<img alt="Screenshoot" src="./docs/Screenshoot.png" width="828">
+<img alt="Screenshoot" src="./docs/Screenshoot.png" width="414">
 </p>

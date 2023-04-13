@@ -11,5 +11,5 @@ has changed for using custom hooks.
 #### Screenshot
 
 <p align="center">
-<img alt="Screenshoot" src="./sudoku/docs/Screenshoot.png" width="828">
+<img alt="Screenshoot" src="./sudoku/docs/Screenshoot.png" width="414">
 </p>
