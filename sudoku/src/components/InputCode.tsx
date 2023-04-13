@@ -34,13 +34,13 @@ export function InputCode(props: Props) {
 
     return (
         <div className={props.className}>
-            <label className="label" htmlFor="c0de">
+            <label className="color:white" htmlFor="c0de">
                 Puzzle code:
             </label>
             <input
                 value={puzzleCode}
                 onChange={({target}) => setPuzzleCode(target.value)}
-                className="code"
+                className="py:0.3rem px:1rem bg:sky-88 border:none r:1rem color:gray"
                 id="c0de"
                 placeholder="Paste sudoku string here"
                 spellCheck="false"
