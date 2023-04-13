@@ -1,5 +1,7 @@
-(function(){
-/* ------------------------ */
+export function useBSP() {
+    const BSP = {}
+
+
     const schedule = function () {
         var SONG = BSP.SONG;
         var fix = function (n) {
@@ -262,5 +264,5 @@
 
     init();
 
-/* ------------------------ */
-})();
+    return BSP;
+}

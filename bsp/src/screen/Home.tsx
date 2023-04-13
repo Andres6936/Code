@@ -1,4 +1,5 @@
-import {useEffect} from "react";
+import {useContext, useEffect, useState} from "react";
+import {AppContext, IAppContext} from "../context/AppContext";
 
 const BSP = {};
 const songs = [
@@ -17,20 +18,21 @@ const songs = [
 ];
 
 function Stop() {
+    const appContext = useContext<IAppContext>(AppContext)
+    const [currentState, setCurrentState] = useState<string>('Stop')
+
     const onSwithPlay = () => {
-        if (BSP.paused) {
-            BSP.ctx.resume();
-            BSP.paused = false;
-            this.innerHTML = "Stop";
+        if (appContext.isPaused()) {
+            appContext.resume()
+            setCurrentState("Stop")
         } else {
-            BSP.ctx.suspend();
-            BSP.paused = true;
-            this.innerHTML = "Resume";
+            appContext.suspend()
+            setCurrentState("Resume")
         }
     }
     
     return (
-        <a onClick={onSwithPlay} href="#" id="wat">Stop</a>
+        <a onClick={onSwithPlay} href="#" id="wat">{currentState}</a>
     )
 }
 

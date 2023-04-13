@@ -2,9 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import '@master/css';
 import {Home} from "./screen/Home";
+import {AppContextProvider} from "./context/AppContext";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <Home/>
+        <AppContextProvider>
+            <Home/>
+        </AppContextProvider>
     </React.StrictMode>,
 )
