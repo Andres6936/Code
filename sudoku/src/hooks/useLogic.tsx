@@ -19,7 +19,11 @@ function bmap(val: string | any[], mode = 0) {
     return mode ? data : String.fromCharCode.apply(0, data);
 }
 
-export const arst = (a: string | number[]) => {
+// Overload definition for specify the conditional type return
+export function arst (a: string) : number[]
+export function arst (a: number[]) : string
+
+export function arst (a: string | number[]) : number[] | string {
     return typeof a === "string" ? [...a].map(a => a.charCodeAt(0)) : String.fromCharCode.apply(0, a)
 }
 
