@@ -93,6 +93,18 @@ function ButtonSmall(props: IButtonSmall) {
     )
 }
 
+interface IButtonLarge {
+    children: React.ReactNode
+}
+
+function ButtonLarge(props: IButtonLarge) {
+    return (
+        <div className={"p:2.2rem r:1rem bg:blue-60 color:white"}>
+            {props.children}
+        </div>
+    )
+}
+
 export function InputOptions() {
     return (
         <div className={"display:flex flex:col p:1rem"}>
@@ -119,11 +131,19 @@ export function InputOptions() {
                 <p className={"color:white"}>Mistakes: 0/3</p>
                 <p className={"color:white"}>00:13</p>
             </div>
-            <div className={"display:flex flex:row align-items:center justify-content:space-between"}>
-                <IconUndo/>
-                <IconEraser/>
-                <IconPencil/>
-                <IconLigthBulb/>
+            <div className={"display:flex flex:row gap:0.5rem align-items:center justify-content:space-between"}>
+                <ButtonLarge>
+                    <IconUndo/>
+                </ButtonLarge>
+                <ButtonLarge>
+                    <IconEraser/>
+                </ButtonLarge>
+                <ButtonLarge>
+                    <IconPencil/>
+                </ButtonLarge>
+                <ButtonLarge>
+                    <IconLigthBulb/>
+                </ButtonLarge>
             </div>
         </div>
     )
