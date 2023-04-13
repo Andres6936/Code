@@ -10,7 +10,15 @@ interface Props {
     // Coordinate relative to zone
     coordinate: Coordinate,
     // Coordinate of zone
-    coordinateOfZone: Coordinate
+    coordinateOfZone: Coordinate,
+    // Apply radius top left
+    rtl?: boolean,
+    // Apply radius top right
+    rtr?: boolean,
+    // Apply radius bottom left
+    rbl?: boolean,
+    // Apply radius bottom right
+    rbr?: boolean,
 }
 
 export function InputCell(props: Props) {
@@ -46,9 +54,24 @@ export function InputCell(props: Props) {
         }
     }
 
+    const getStlyeRadius = () : string => {
+        if (props.rtl) {
+            return " rtl:1rem "
+        } else if (props.rtr) {
+            return " rtr:1rem "
+        } else if (props.rbl) {
+            return " rbl:1rem "
+        } else if (props.rbr) {
+            return " rbr:1rem "
+        } else {
+            return ""
+        }
+    }
+
     return (
         <div onClick={() => markAsCurrentCell()}
-             className={"display:flex flex-grow:1 b:2px|solid|sky-92 align-items:center justify-content:center white-space:pre-wrap " + getClassFocused()}>
+             className={"display:flex flex-grow:1 b:2px|solid|sky-92 align-items:center justify-content:center white-space:pre-wrap "
+             + getClassFocused() + getStlyeRadius()}>
             {getPlaceholderOrValueByUser()}
         </div>
     )
