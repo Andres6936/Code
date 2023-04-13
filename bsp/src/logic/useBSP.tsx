@@ -1,8 +1,66 @@
+import {useEffect, useMemo, useState} from "react";
+import {Optional} from "typescript-optional";
+import {Song} from "../types/Song";
+
 export function useBSP() {
-    const BSP = {}
+    const [currentSong, setCurrentSong] = useState<Optional<Song>>(Optional.empty());
 
+    // Generate equal temperment frequencies
+    const frequencie: Record<string, number> = useMemo(() => {
+        //var JT=[1, 25/24, 9/8, 6/5, 5/4, 4/3, 45/32, 3/2, 8/5, 5/3, 9/5, 15/8];
+        const freq: Record<string, number> = {};
+        let i: number = -57;
+        const o: string[] = "c,c#,d,d#,e,f,f#,g,g#,a,a#,b".split(",");
+        for (let n: number = 0, p: number = 0; 63 > i; i++) {
+            //var Q = Math.floor((i+9)/12);
+            const freq1 = 440 * Math.pow(Math.pow(2, 1 / 12), i);
+            //var freq2 = 261.625*((Q==0)?JT[n]:Math.pow(2,Q)*JT[n]);
+            freq[o[n++] + p] = freq1;
+            12 == n && (p++, n = 0);
+        }
+        return freq;
+    }, [])
 
-    const schedule = function () {
+    // Use a WebWorker for something. I guess for accurate scheduling.
+    const worker = useMemo(() => {
+        const body = function () {
+            function tic(n: () => void, t: number) {
+                function i() {
+                    n(), u || setTimeout(i, t)
+                }
+
+                var u = 0;
+                return i(), function () {
+                    u = 1
+                }
+            }
+
+            self.onmessage = function (e) {
+                tic(function () {
+                    self.postMessage(0)
+                }, 5);
+            };
+        };
+        const blob = new Blob([body.toString().replace(/(^.*?\{|\}$)/g, "")], {type: "text/javascript"});
+        return new Worker(URL.createObjectURL(blob));
+    }, [])
+
+    useEffect(() => {
+        worker.onmessage = function (e) {
+            // if running out of time, schedule the next loop of the song
+            if (BSP.ctx.currentTime >= BSP.time - (BSP.speed * BSP.sub)) {
+                schedule();
+            }
+        };
+
+        startSong();
+    }, [])
+
+    const getCurrentSong = () => currentSong
+
+    const changeSong = (song: Optional<Song>) => setCurrentSong(song);
+
+    const schedule = () => {
         var SONG = BSP.SONG;
         var fix = function (n) {
             return Math.round(n * 1000) / 1000;
@@ -17,7 +75,7 @@ export function useBSP() {
                 if (step && step[0] && step[0].length === 4)  // note length parse
                     nlen = BSP.speed * (("ABCDEFGQ".indexOf(step[0][3].toUpperCase()) + 1) / 8);
 
-                if (step && step[0] && BSP.freq[gnt(step[0])]) {
+                if (step && step[0] && frequencie[gnt(step[0])]) {
                     // set Filter cutoff if found
                     if (step[4] !== undefined)
                         BSP.Filter[j].frequency.setValueAtTime(step[4], tick);
@@ -30,19 +88,19 @@ export function useBSP() {
                     // For noise
                     if (BSP.osc[j].constructor === AudioBufferSourceNode)
                         BSP.osc[j].playbackRate.setValueAtTime(
-                            BSP.freq[gnt(step[0])] / (SONG.sampleData[j][1].length >= 2048 ? SONG.sampleData[j][1].length / 128 : 1) * SONG.sampleData[j][1].length / 44100, tick);
+                            frequencie[gnt(step[0])] / (SONG.sampleData[j][1].length >= 2048 ? SONG.sampleData[j][1].length / 128 : 1) * SONG.sampleData[j][1].length / 44100, tick);
                     // only set frequency if OscNode
                     if (BSP.osc[j].constructor === OscillatorNode)
-                        BSP.osc[j].frequency.setValueAtTime((BSP.freq[gnt(step[0])] / (SONG.trans || 2)), tick);
+                        BSP.osc[j].frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick);
                     if (BSP.osc[j].osc1 && BSP.osc[j].osc2 && step[2] !== undefined)
                         BSP.lastPWM[j] = step[2];
                     if (BSP.osc[j].osc1 && BSP.osc[j].osc2 && step[5] !== undefined)
                         BSP.lastPWM2[j] = step[5];
 
                     if (BSP.osc[j].osc1 && BSP.osc[j].osc2) {
-                        BSP.osc[j].osc1.frequency.setValueAtTime((BSP.freq[gnt(step[0])] / (SONG.trans || 2)), tick),
-                            BSP.osc[j].osc2.frequency.setValueAtTime((BSP.freq[gnt(step[0])] / (SONG.trans || 2)), tick),
-                            BSP.osc[j].delay.delayTime.setValueAtTime((1 - BSP.lastPWM[j] || 0) / BSP.freq[gnt(step[0])], tick);
+                        BSP.osc[j].osc1.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
+                            BSP.osc[j].osc2.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
+                            BSP.osc[j].delay.delayTime.setValueAtTime((1 - BSP.lastPWM[j] || 0) / frequencie[gnt(step[0])], tick);
                         BSP.osc[j].osc2.detune.setValueAtTime(BSP.lastPWM2[j] || 0, tick);
                     }
                     if (tick > 0) {
@@ -65,7 +123,7 @@ export function useBSP() {
         BSP.time = tick;
     };
 
-    const startSong = function () {
+    const startSong = () => {
         function BufferNode(ctx, rate, data) {
             var buf = ctx.createBuffer(1, data.length, rate);
             buf.getChannelData(0).set(data);
@@ -204,65 +262,12 @@ export function useBSP() {
         }
 
         schedule();
-        BSP.worker.postMessage(0);
+        worker.postMessage(0);
     };
 
-    /* ----------------------------
-        func init()
-        initialize our program on page load.
-    ---------------------------- */
-    const init = function () {
-        // generate equal temperment frequencies
-        BSP.freq = (function () {
-            //var JT=[1, 25/24, 9/8, 6/5, 5/4, 4/3, 45/32, 3/2, 8/5, 5/3, 9/5, 15/8];
-            var freq = {}, i = -57, o = "c,c#,d,d#,e,f,f#,g,g#,a,a#,b".split(",");
-            for (var n = 0, p = 0; 63 > i; i++) {
-                //var Q = Math.floor((i+9)/12);
-                var freq1 = 440 * Math.pow(Math.pow(2, 1 / 12), i);
-                //var freq2 = 261.625*((Q==0)?JT[n]:Math.pow(2,Q)*JT[n]);
-                freq[o[n++] + p] = freq1;
-                12 == n && (p++, n = 0);
-            }
-            return freq;
-        })();
 
-        // use a WebWorker for something. I guess for accurate scheduling.
-        BSP.worker = (function () {
-            var body = function () {
-                function tic(n, t) {
-                    function i() {
-                        n(), u || setTimeout(i, t)
-                    }
-
-                    var u = 0;
-                    return i(), function () {
-                        u = 1
-                    }
-                }
-
-                self.onmessage = function (e) {
-                    tic(function () {
-                        self.postMessage(0)
-                    }, 5);
-                };
-            };
-            var blob = new Blob([body.toString().replace(/(^.*?\{|\}$)/g, "")], {type: "text/javascript"});
-            return new Worker(URL.createObjectURL(blob));
-        }());
-
-        BSP.worker.onmessage = function (e) {
-            // if running out of time, schedule the next loop of the song
-            if (BSP.ctx.currentTime >= BSP.time - (BSP.speed * BSP.sub)) {
-                schedule();
-            }
-        };
-
-        window.addEventListener("load", function () {
-            startSong();
-        });
+    return {
+        getCurrentSong,
+        changeSong,
     };
-
-    init();
-
-    return BSP;
 }
