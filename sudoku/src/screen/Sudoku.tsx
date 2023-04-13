@@ -9,7 +9,7 @@ export function Sudoku() {
         <div className={"min-h:100vh bg:blue-50  display:flex "}>
             <div className={"display:flex flex:col w:50rem"}>
                 <div className={"flex:1"}>
-                    <InputOptions/>
+                    <InputOptions className={"display:flex flex:col p:1rem"}/>
                     <InputCode className={"display:flex gap:1rem flex:1 align-items:center justify-content:center mb:1rem"}/>
                 </div>
                 <div className={"flex:3 bg:white px:8 rt:2rem"}>

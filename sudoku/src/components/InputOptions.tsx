@@ -107,9 +107,13 @@ function ButtonLarge(props: IButtonLarge) {
     )
 }
 
-export function InputOptions() {
+interface Props {
+    className?: string
+}
+
+export function InputOptions(props: Props) {
     return (
-        <div className={"display:flex flex:col p:1rem"}>
+        <div className={props.className}>
             <div className={"display:flex flex:row align-items:center justify-content:space-between"}>
                 <div className={"display:flex flex:1"}>
                     <ButtonSmall>
