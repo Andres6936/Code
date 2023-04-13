@@ -2,7 +2,11 @@ import React, {useContext, useEffect, useState} from "react";
 import {crc8, eee} from "../hooks/useLogic";
 import {ISudokuContext, SudokuContext} from "../context/SudokuContext";
 
-export function InputCode() {
+interface Props {
+    className?: string
+}
+
+export function InputCode(props: Props) {
     const sudoku = useContext<ISudokuContext>(SudokuContext)
     const [puzzleCode, setPuzzleCode] = useState<string>(sudoku.getHashBoard())
 
@@ -29,7 +33,7 @@ export function InputCode() {
     }, [puzzleCode])
 
     return (
-        <>
+        <div className={props.className}>
             <label className="label" htmlFor="c0de">
                 Puzzle code:
             </label>
@@ -41,6 +45,6 @@ export function InputCode() {
                 placeholder="Paste sudoku string here"
                 spellCheck="false"
             />
-        </>
+        </div>
     )
 }

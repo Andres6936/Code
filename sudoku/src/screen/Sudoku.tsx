@@ -6,13 +6,15 @@ import {InputOptions} from "../components/InputOptions";
 
 export function Sudoku() {
     return (
-        <div className={"min-h:100vh display:flex align-items:center justify-content:center "}>
-            <div className={"display:flex flex:col w:50rem "}>
-                <InputCode/>
-                <InputNotes/>
-                <Board/>
-                <InputOptions/>
-                <div className="info"/>
+        <div className={"min-h:100vh bg:blue-50  display:flex "}>
+            <div className={"display:flex flex:col w:50rem"}>
+                <InputCode className={"flex:1"}/>
+                <div className={"flex:4 bg:white px:8 rt:2rem"}>
+                    <Board/>
+                    <InputNotes/>
+                    <InputOptions/>
+                    <div className="info"/>
+                </div>
             </div>
         </div>
     )
