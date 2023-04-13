@@ -35,9 +35,9 @@ export function InputCell(props: Props) {
 
     const getClassFocused = () => {
         if (isFocusedByUser() && !cell.isPlaceholder()) {
-            return "bg:sky-80"
+            return "bg:sky-78"
         } else {
-            return "bg:sky-88"
+            return "bg:sky-86"
         }
     }
 
@@ -56,13 +56,13 @@ export function InputCell(props: Props) {
 
     const getStlyeRadius = () : string => {
         if (props.rtl) {
-            return " rtl:1rem "
+            return " rtl:1.5rem "
         } else if (props.rtr) {
-            return " rtr:1rem "
+            return " rtr:1.5rem "
         } else if (props.rbl) {
-            return " rbl:1rem "
+            return " rbl:1.5rem "
         } else if (props.rbr) {
-            return " rbr:1rem "
+            return " rbr:1.5rem "
         } else {
             return ""
         }
@@ -70,7 +70,7 @@ export function InputCell(props: Props) {
 
     return (
         <div onClick={() => markAsCurrentCell()}
-             className={"display:flex flex-grow:1 b:2px|solid|sky-92 align-items:center justify-content:center white-space:pre-wrap "
+             className={"display:flex flex-grow:1 b:2px|solid|sky-90 align-items:center justify-content:center white-space:pre-wrap "
              + getClassFocused() + getStlyeRadius()}>
             {getPlaceholderOrValueByUser()}
         </div>

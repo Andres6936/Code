@@ -21,7 +21,7 @@ export function Board() {
     }, [context])
 
     return (
-        <div className="sudoku max-w:35rem my:2rem">
+        <div className="sudoku max-w:35rem my:1rem">
             <div className={"display:flex flex:row"}>
                 <Zone coordinate={{x: 0, y: 0}}/>
                 <Zone coordinate={{x: 1, y: 0}}/>
