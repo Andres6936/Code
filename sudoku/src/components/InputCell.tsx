@@ -43,13 +43,13 @@ export function InputCell(props: Props) {
 
     const getPlaceholderOrValueByUser = () => {
         if (cell.isPlaceholder()) {
-            return <p className={"font:bold"}>{cell.value}</p>
+            return <p className={"m:0 px:0.7rem py:0.5rem font:bold font-size:1.5rem opacity:0.5"}>{cell.value}</p>
         } else {
             // Handle the case of input for the user
             if (cell.value === 0) {
-                return <p className={"font:italic"}>{'  '}</p>
+                return <p className={"m:0 px:0.7rem py:0.5rem font:italic font-size:1.5rem"}>{'  '}</p>
             } else {
-                return <p className={"font:italic"}>{cell.value}</p>
+                return <p className={"m:0 px:0.7rem py:0.5rem font:bold font-size:1.5rem"}>{cell.value}</p>
             }
         }
     }
