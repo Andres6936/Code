@@ -1,5 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {AppContext, IAppContext} from "../context/AppContext";
+import {Optional} from "typescript-optional";
+import { Song } from "../types/Song";
 
 const BSP = {};
 const songs = [
@@ -37,15 +39,27 @@ function Stop() {
 }
 
 function Description() {
-    return (
-        <div>
-            <b>Title</b> = {BSP.SONG.title || "<i>none</i>"}<br/>
-            <b>Date</b> = {BSP.SONG.date || "<i>none</i>"}<br/>
-            <b>Author</b> = {BSP.SONG.author || "<i>none</i>"}<br/>
-            <b>BPM</b> = {BSP.SONG.bpm} {BSP.SONG.divide ? BSP.SONG.divide + "steps per beat" : ""}<br/>
-            <h2>Comment</h2>{BSP.SONG.comment || "<i>none</i>"}<br/>
-        </div>
-    )
+    const appContext = useContext<IAppContext>(AppContext)
+    const song: Optional<Song> = appContext.getCurrentSong()
+
+    const renderDescription = () => {
+        if (song.isPresent()) {
+            const information = song.get();
+            return (
+                <div>
+                    <b>Title</b> = {information.title || "<i>none</i>"}<br/>
+                    <b>Date</b> = {information.date || "<i>none</i>"}<br/>
+                    <b>Author</b> = {information.author || "<i>none</i>"}<br/>
+                    <b>BPM</b> = {information.bpm} {information.divide ? information.divide + "steps per beat" : ""}<br/>
+                    <h2>Comment</h2>{information.comment || "<i>none</i>"}<br/>
+                </div>
+            )
+        } else {
+            return null
+        }
+    }
+
+    return renderDescription();
 }
 
 export function Home() {
