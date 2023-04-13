@@ -85,29 +85,30 @@
 <div id=z8i></div>
 
 <script>
-    var BSP = {},
-        songs = [
-            "old",
-            "mono",
-            "organ",
-            "cool",
-            "poly",
-            "swell",
-            "stormlord2",
-            "automation",
-            "automation2",
-            "wavetablez",
-            "wavetablez2",
-            "wavetablez3",
-        ];
+    const BSP = {};
+    const songs = [
+        "old",
+        "mono",
+        "organ",
+        "cool",
+        "poly",
+        "swell",
+        "stormlord2",
+        "automation",
+        "automation2",
+        "wavetablez",
+        "wavetablez2",
+        "wavetablez3",
+    ];
 
     for (var s = '<a href=# id=wat>Stop</a>', i = 0; i < songs.length; i++) {
         s += `<a id=z href=?${songs[i]}>${songs[i]}</a>`;
     }
+    const s = document.createElement("script");
     document.querySelector("div#z7i").innerHTML = s;
 
     if (location.search.length && songs.indexOf(location.search.slice(1)) > -1) {
-        var s2 = document.createElement("script"), s = document.createElement("script");
+        const s2 = document.createElement("script");
         s.src = "bsp.js";
         s2.src = "songs/" + location.search.slice(1) + ".js";
         document.head.append(s), document.head.append(s2);
