@@ -94,13 +94,15 @@ function ButtonSmall(props: IButtonSmall) {
 }
 
 interface IButtonLarge {
+    title: string,
     children: React.ReactNode
 }
 
 function ButtonLarge(props: IButtonLarge) {
     return (
-        <div className={"p:2.2rem r:1rem bg:blue-60 color:white"}>
+        <div className={"display:flex flex:1 flex:col align-items:center justify-content:center p:1rem r:1rem bg:blue-60 color:white"}>
             {props.children}
+            <p className={"mt:0.5rem mb:0.5rem font:bold color:white"}>{props.title}</p>
         </div>
     )
 }
@@ -132,16 +134,16 @@ export function InputOptions() {
                 <p className={"color:white"}>00:13</p>
             </div>
             <div className={"display:flex flex:row gap:0.5rem align-items:center justify-content:space-between"}>
-                <ButtonLarge>
+                <ButtonLarge title="Undo">
                     <IconUndo/>
                 </ButtonLarge>
-                <ButtonLarge>
+                <ButtonLarge title="Eraser">
                     <IconEraser/>
                 </ButtonLarge>
-                <ButtonLarge>
+                <ButtonLarge title={"Pencil"}>
                     <IconPencil/>
                 </ButtonLarge>
-                <ButtonLarge>
+                <ButtonLarge title={"Hint"}>
                     <IconLigthBulb/>
                 </ButtonLarge>
             </div>
