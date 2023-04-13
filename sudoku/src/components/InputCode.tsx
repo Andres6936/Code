@@ -40,7 +40,7 @@ export function InputCode(props: Props) {
             <input
                 value={puzzleCode}
                 onChange={({target}) => setPuzzleCode(target.value)}
-                className="py:0.3rem px:1rem bg:sky-88 border:none r:1rem color:gray"
+                className="py:0.3rem px:2rem bg:blue-60 border:none r:1rem color:white"
                 id="c0de"
                 placeholder="Paste sudoku string here"
                 spellCheck="false"
