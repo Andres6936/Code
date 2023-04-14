@@ -95,7 +95,7 @@ export function useBSP() {
                 if (step && step[0] && frequencie[gnt(step[0])]) {
                     // set Filter cutoff if found
                     if (step[4] !== undefined)
-                       filter[j].frequency.setValueAtTime(step[4], tick);
+                        filter[j].frequency.setValueAtTime(step[4], tick);
                     // set LFO amount if found
                     if (step[3] !== undefined)
                         modGain[j].gain.setValueAtTime(step[3], tick);
@@ -104,21 +104,21 @@ export function useBSP() {
                         osc[j].width.setValueAtTime(step[2], tick);
                     // For noise
                     if (osc[j].constructor === AudioBufferSourceNode)
-                        osc[j].playbackRate.setValueAtTime(
+                        (osc[j] as AudioBufferSourceNode).playbackRate.setValueAtTime(
                             frequencie[gnt(step[0])] / (SONG.sampleData[j][1].length >= 2048 ? SONG.sampleData[j][1].length / 128 : 1) * SONG.sampleData[j][1].length / 44100, tick);
                     // only set frequency if OscNode
                     if (osc[j].constructor === OscillatorNode)
-                        osc[j].frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick);
+                        (osc[j] as OscillatorNode).frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick);
                     if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2 && step[2] !== undefined)
                         lastPWM[j] = step[2];
                     if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2 && step[5] !== undefined)
                         lastPWM2[j] = step[5];
 
                     if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2) {
-                        osc[j].osc1.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
-                            osc[j].osc2.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
-                            osc[j].delay.delayTime.setValueAtTime((1 - lastPWM[j] || 0) / frequencie[gnt(step[0])], tick);
-                        osc[j].osc2.detune.setValueAtTime(lastPWM2[j] || 0, tick);
+                        (osc[j] as PulseOscillator).osc1.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
+                            (osc[j] as PulseOscillator).osc2.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
+                            (osc[j] as PulseOscillator).delay.delayTime.setValueAtTime((1 - lastPWM[j] || 0) / frequencie[gnt(step[0])], tick);
+                        (osc[j] as PulseOscillator).osc2.detune.setValueAtTime(lastPWM2[j] || 0, tick);
                     }
                     if (tick > 0) {
                         amp[1][j].gain.setValueAtTime(lastVol[j] || 0, fix(tick - n));
