@@ -137,7 +137,7 @@ export function useBSP() {
     const [delayGain, setDelayGain] = useState<GainNode[]>([])
     const [filter, setFilter] = useState<BiquadFilterNode[]>([])
     const [modGain, setModGain] = useState<GainNode[]>([])
-    const [LFO, setLFO] = useState({})
+    const [LFO, setLFO] = useState<OscillatorNode>()
     // create Oscillators for song.
     const [waves, setWaves] = useState<OscillatorType[]>(["sine", "square", "triangle", "sawtooth"])
 
