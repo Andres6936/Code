@@ -1,6 +1,7 @@
 import {useEffect, useMemo, useState} from "react";
 import {Optional} from "typescript-optional";
 import {Song} from "../types/Song";
+import {PulseOscillator, useCreatePulseOscillator} from "./useCreatePulseOscillator";
 
 export function useBSP() {
     const [currentSong, setCurrentSong] = useState<Optional<Song>>(Optional.empty());
@@ -123,8 +124,25 @@ export function useBSP() {
         BSP.time = tick;
     };
 
+    const [lastVol, setLastVol] = useState([])
+    const [lastPWM, setLastPWM] = useState([])
+    const [lastPWM2, setLastPWM2] = useState([])
+    const [speed, setSpeed] = useState(0)
+    const [sub, setSub] = useState(0)
+    const [ctx, setCtx] = useState(new AudioContext())
+    const [time, setTime] = useState(ctx.currentTime)
+    const [osc, setOsc] = useState<(OscillatorNode | AudioBufferSourceNode | PulseOscillator)[]>([])
+    const [amp, setAmp] = useState([[], []])
+    const [delay, setDelay] = useState([])
+    const [delayGain, setDelayGain] = useState([])
+    const [filter, setFilter] = useState([])
+    const [modGain, setModGain] = useState([])
+    const [LFO, setLFO] = useState({})
+    // create Oscillators for song.
+    const [waves, setWaves] = useState<OscillatorType[]>(["sine", "square", "triangle", "sawtooth"])
+
     const startSong = () => {
-        function BufferNode(ctx, rate, data) {
+        function BufferNode(ctx: AudioContext, rate, data): AudioBufferSourceNode {
             var buf = ctx.createBuffer(1, data.length, rate);
             buf.getChannelData(0).set(data);
             var bufferSource = ctx.createBufferSource();
@@ -135,131 +153,86 @@ export function useBSP() {
             return bufferSource;
         }
 
-        function CreatePulseOscillator(ctx) {
-            var PWM = {},
-                osc1 = ctx.createOscillator(),
-                osc2 = ctx.createOscillator(),
-                inverter = ctx.createGain(),
-                output = ctx.createGain(),
-                delay = ctx.createDelay();
+        const SONG: Song = currentSong.get();
+        setSpeed( 60 / SONG.bpm / (SONG.divide || 4));
+        setSub(SONG.seq[0].length);
 
-            osc1.type = "sawtooth", osc2.type = "sawtooth";
-            inverter.gain.setValueAtTime(-1, 0);
-            delay.delayTime.setValueAtTime(.004, 0); // Hmm
+        const LFO: OscillatorNode = ctx.createOscillator();
+        LFO.type = 'sine';
+        LFO.frequency.setValueAtTime(7.8, 0);
+        LFO.start(0);
+        setLFO(LFO)
+        const osc: (OscillatorNode | AudioBufferSourceNode | PulseOscillator)[] = []
 
-            osc1.connect(output);
-            osc2.connect(inverter);
-            inverter.connect(delay);
-            delay.connect(output);
-
-            PWM.osc1 = osc1, PWM.osc2 = osc2,
-                PWM.output = output, PWM.delay = delay;
-
-            // PWM.connect = inverter.connect;
-            PWM.start = function (t) {
-                this.osc1.start(t);
-                this.osc2.start(t)
-            };
-            PWM.stop = function (t) {
-                this.osc1.stop(t);
-                this.osc2.stop(t)
-            };
-            //this.delay.delayTime.value = amt/this.osc1.frequency.value;
-
-            //BSP.osc[j].delay.delayTime.setValueAtTime(step[2] / BSP.osc[j].osc1.frequency.value, tick);
-            return PWM;
-        }
-
-        var SONG = BSP.SONG;
-        BSP.lastVol = [];
-        BSP.lastPWM = [];
-        BSP.lastPWM2 = [];
-        BSP.speed = 60 / SONG.bpm / (SONG.divide || 4);
-        BSP.sub = SONG.seq[0].length;
-        BSP.ctx = new AudioContext();
-        BSP.time = BSP.ctx.currentTime;
-        BSP.osc = [];
-        BSP.amp = [[], []];
-        BSP.Delay = [];
-        BSP.DelayGain = [];
-        BSP.Filter = [];
-        BSP.modGain = [];
-
-        BSP.LFO = BSP.ctx.createOscillator();
-        BSP.LFO.type = 'sine';
-        BSP.LFO.frequency.setValueAtTime(7.8, 0);
-        BSP.LFO.start(0);
-
-        // create Oscillators for song.
-        var waves = ["sine", "square", "triangle", "sawtooth"];
-        BSP.waves = waves;
         for (var j = 0; j < SONG.seq.length; j++) {
-            BSP.osc[j] = BSP.ctx.createOscillator();
+            osc[j] = ctx.createOscillator();
             // White Noise
-            if (SONG.wave && SONG.wave[j] === 4) BSP.osc[j] = BufferNode(BSP.ctx, SONG.sampleData[j][0], SONG.sampleData[j][1]);
+            if (SONG.wave && SONG.wave[j] === 4) osc[j] = BufferNode(ctx, SONG.sampleData[j][0], SONG.sampleData[j][1]);
             // PWM
-            if (SONG.wave && SONG.wave[j] === 5) BSP.osc[j] = CreatePulseOscillator(BSP.ctx);
+            if (SONG.wave && SONG.wave[j] === 5) osc[j] = useCreatePulseOscillator(ctx);
             // Periodic wave
             if (SONG.wave && SONG.wave[j] && SONG.wave[j].constructor === Array) {
-                var waveform = BSP.ctx.createPeriodicWave(SONG.wave[j][0], SONG.wave[j][1]);
-                BSP.osc[j].setPeriodicWave(waveform);
+                var waveform = ctx.createPeriodicWave(SONG.wave[j][0], SONG.wave[j][1]);
+                (osc[j] as OscillatorNode).setPeriodicWave(waveform);
                 // Raw Oscillator Waveform
             } else if (SONG.wave && waves[SONG.wave[j]] !== undefined) {
-                BSP.osc[j].type = waves[SONG.wave[j]];
+                (osc[j] as OscillatorNode).type = waves[SONG.wave[j]];
                 // No waveforms defined
             } else if (!SONG.wave) {
-                BSP.osc[j].type = waves[1];
+                (osc[j] as OscillatorNode).type = waves[1];
             }
             if (SONG.wave) {
-                BSP.modGain[j] = BSP.ctx.createGain();
+                BSP.modGain[j] = ctx.createGain();
                 BSP.modGain[j].gain.setValueAtTime(0, 0);
                 if (SONG.wave[j] === 4)
-                    BSP.modGain[j].connect(BSP.osc[j].playbackRate);
+                    BSP.modGain[j].connect((osc[j] as AudioBufferSourceNode).playbackRate);
                 else if (SONG.wave[j] !== 5)
-                    BSP.modGain[j].connect(BSP.osc[j].frequency);
+                    BSP.modGain[j].connect((osc[j] as OscillatorNode).frequency);
                 else
-                    BSP.modGain[j].connect(BSP.osc[j].osc1.frequency),
-                        BSP.modGain[j].connect(BSP.osc[j].osc2.frequency);
-                BSP.LFO.connect(BSP.modGain[j]);
+                    BSP.modGain[j].connect((osc[j] as PulseOscillator).osc1.frequency),
+                        BSP.modGain[j].connect((osc[j] as PulseOscillator).osc2.frequency);
+                LFO.connect(BSP.modGain[j]);
             }
 
-            BSP.amp[0][j] = BSP.ctx.createGain(); // Osc Channel Volume
-            BSP.amp[1][j] = BSP.ctx.createGain(); // Osc Note Volume
+            BSP.amp[0][j] = ctx.createGain(); // Osc Channel Volume
+            BSP.amp[1][j] = ctx.createGain(); // Osc Note Volume
             BSP.amp[1][j].gain.setValueAtTime(0, 0);
             BSP.amp[0][j].gain.setValueAtTime(SONG.cVol && SONG.cVol[j] ? SONG.cVol[j] : 1, 0);
             if (SONG.wave && SONG.wave[j] == 5)
-                BSP.osc[j].output.connect(BSP.amp[1][j]);
+                (osc[j] as PulseOscillator).output.connect(BSP.amp[1][j]);
             else
-                BSP.osc[j].connect(BSP.amp[1][j]);
+                (osc[j] as OscillatorNode).connect(BSP.amp[1][j]);
             BSP.amp[1][j].connect(BSP.amp[0][j]);
 
-            BSP.Filter[j] = BSP.ctx.createBiquadFilter();
+            BSP.Filter[j] = ctx.createBiquadFilter();
             BSP.Filter[j].frequency.setValueAtTime(18000, 0);
             BSP.Filter[j].Q.setValueAtTime(10, 0);
             BSP.Filter[j].type = 'lowpass';
 
-            BSP.Delay[j] = BSP.ctx.createDelay(.5);
+            BSP.Delay[j] = ctx.createDelay(.5);
             BSP.Delay[j].delayTime.setValueAtTime(BSP.speed * 2, 0)
-            BSP.DelayGain[j] = BSP.ctx.createGain();
+            BSP.DelayGain[j] = ctx.createGain();
             BSP.DelayGain[j].gain.setValueAtTime(SONG.delay && SONG.delay[j] ? SONG.delay[j] : 0, 0);
 
             BSP.Delay[j].connect(BSP.DelayGain[j]);
-            BSP.DelayGain[j].connect(BSP.ctx.destination);
+            BSP.DelayGain[j].connect(ctx.destination);
 
             if (SONG.wave) {
                 BSP.amp[0][j].connect(BSP.Filter[j]);
                 BSP.Filter[j].connect(BSP.Delay[j]);
-                BSP.Filter[j].connect(BSP.ctx.destination);
+                BSP.Filter[j].connect(ctx.destination);
 
             } else {
                 BSP.amp[0][j].connect(BSP.Delay[j]);
-                BSP.amp[0][j].connect(BSP.ctx.destination);
+                BSP.amp[0][j].connect(ctx.destination);
             }
         }
 
-        for (var i = 0; i < BSP.osc.length; i++) {
-            BSP.osc[i].start(BSP.ctx.currentTime);
+        for (var i = 0; i < osc.length; i++) {
+            osc[i].start(ctx.currentTime);
         }
+
+        setOsc(osc);
 
         schedule();
         worker.postMessage(0);
