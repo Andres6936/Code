@@ -154,7 +154,7 @@ export function useBSP() {
         }
 
         const SONG: Song = currentSong.get();
-        setSpeed( 60 / SONG.bpm / (SONG.divide || 4));
+        const speed = 60 / SONG.bpm / (SONG.divide || 4)
         setSub(SONG.seq[0].length);
 
         const LFO: OscillatorNode = ctx.createOscillator();
@@ -215,7 +215,7 @@ export function useBSP() {
             filter[j].type = 'lowpass';
 
             delay[j] = ctx.createDelay(.5);
-            delay[j].delayTime.setValueAtTime(BSP.speed * 2, 0)
+            delay[j].delayTime.setValueAtTime(speed * 2, 0)
             delayGain[j] = ctx.createGain();
             delayGain[j].gain.setValueAtTime(SONG.delay && SONG.delay[j] ? SONG.delay[j] : 0, 0);
 
@@ -240,6 +240,7 @@ export function useBSP() {
         setDelayGain(delayGain);
         setModGain(modGain);
         setFilter(filter);
+        setSpeed(speed);
         setDelay(delay);
         setLFO(LFO);
         setOsc(osc);
