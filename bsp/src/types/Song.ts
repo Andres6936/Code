@@ -9,5 +9,6 @@ export interface Song {
     wave: (number | Float32Array[])[],
     delay: number[],
     sampleData: any[],
-    seq: any[]
+    seq: any[],
+    trans?: number
 }

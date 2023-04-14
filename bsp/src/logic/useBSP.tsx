@@ -5,9 +5,9 @@ import {PulseOscillator, useCreatePulseOscillator} from "./useCreatePulseOscilla
 
 export function useBSP() {
     const [currentSong, setCurrentSong] = useState<Optional<Song>>(Optional.empty());
-    const [lastVol, setLastVol] = useState([])
-    const [lastPWM, setLastPWM] = useState([])
-    const [lastPWM2, setLastPWM2] = useState([])
+    const [lastVol, setLastVol] = useState<any[]>([])
+    const [lastPWM, setLastPWM] = useState<any[]>([])
+    const [lastPWM2, setLastPWM2] = useState<any[]>([])
     const [speed, setSpeed] = useState(0)
     const [sub, setSub] = useState(0)
     const [ctx, setCtx] = useState(new AudioContext())
@@ -138,6 +138,9 @@ export function useBSP() {
             }
         }
         setTime(tick);
+        setLastVol([...lastVol]);
+        setLastPWM([...lastPWM]);
+        setLastPWM2([...lastPWM2]);
     };
 
     const startSong = () => {
