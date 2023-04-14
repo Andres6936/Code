@@ -3,6 +3,7 @@ export interface PulseOscillator {
     osc2: OscillatorNode,
     output: GainNode,
     delay: DelayNode,
+    width?: AudioParam,
     start: (when?: number | undefined) => void,
     stop: (when?: number | undefined) => void,
 }

@@ -101,8 +101,8 @@ export function useBSP() {
                     if (step[3] !== undefined)
                         modGain[j].gain.setValueAtTime(step[3], tick);
                     // set PWM value if found
-                    if (osc[j].width && step[2] !== undefined)
-                        osc[j].width.setValueAtTime(step[2], tick);
+                    if ((osc[j] as PulseOscillator).width && step[2] !== undefined)
+                        (osc[j] as PulseOscillator).width?.setValueAtTime(step[2], tick);
                     // For noise
                     if (osc[j].constructor === AudioBufferSourceNode)
                         (osc[j] as AudioBufferSourceNode).playbackRate.setValueAtTime(
