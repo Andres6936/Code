@@ -19,6 +19,7 @@ export function useBSP() {
     const [filter, setFilter] = useState<BiquadFilterNode[]>([])
     const [modGain, setModGain] = useState<GainNode[]>([])
     const [LFO, setLFO] = useState<OscillatorNode>()
+    const [startSchedule, setStartSchedule] = useState<boolean>(false);
     // create Oscillators for song.
     const [waves, setWaves] = useState<OscillatorType[]>(["sine", "square", "triangle", "sawtooth"])
 
@@ -77,72 +78,75 @@ export function useBSP() {
 
     const changeSong = (song: Optional<Song>) => setCurrentSong(song);
 
-    const schedule = () => {
-        const SONG = currentSong.get();
-        const fix = function (n: number) {
-            return Math.round(n * 1000) / 1000;
-        };
-        const gnt = function (n: string) {
-            return n.substr(0, 3).replace("-", "");
-        };
+    useEffect(() => {
+        if (startSchedule && currentSong.isPresent()) {
+            const SONG = currentSong.get();
+            const fix = function (n: number) {
+                return Math.round(n * 1000) / 1000;
+            };
+            const gnt = function (n: string) {
+                return n.substr(0, 3).replace("-", "");
+            };
 
-        let tick = time;
-        for (var n = 0.000501, j = 0; j < SONG.seq.length; j++) {
-            for (let i = 0; i < SONG.seq[j].length;) {
-                var step = SONG.seq[j][i], note, nlen = 0;
-                if (step && step[0] && step[0].length === 4)  // note length parse
-                    nlen = speed * (("ABCDEFGQ".indexOf(step[0][3].toUpperCase()) + 1) / 8);
+            let tick = time;
+            for (var n = 0.000501, j = 0; j < SONG.seq.length; j++) {
+                for (let i = 0; i < SONG.seq[j].length;) {
+                    var step = SONG.seq[j][i], note, nlen = 0;
+                    if (step && step[0] && step[0].length === 4)  // note length parse
+                        nlen = speed * (("ABCDEFGQ".indexOf(step[0][3].toUpperCase()) + 1) / 8);
 
-                if (step && step[0] && frequencie[gnt(step[0])]) {
-                    // set Filter cutoff if found
-                    if (step[4] !== undefined)
-                        filter[j].frequency.setValueAtTime(step[4], tick);
-                    // set LFO amount if found
-                    if (step[3] !== undefined)
-                        modGain[j].gain.setValueAtTime(step[3], tick);
-                    // set PWM value if found
-                    if ((osc[j] as PulseOscillator).width && step[2] !== undefined)
-                        (osc[j] as PulseOscillator).width?.setValueAtTime(step[2], tick);
-                    // For noise
-                    if (osc[j].constructor === AudioBufferSourceNode)
-                        (osc[j] as AudioBufferSourceNode).playbackRate.setValueAtTime(
-                            frequencie[gnt(step[0])] / (SONG.sampleData[j][1].length >= 2048 ? SONG.sampleData[j][1].length / 128 : 1) * SONG.sampleData[j][1].length / 44100, tick);
-                    // only set frequency if OscNode
-                    if (osc[j].constructor === OscillatorNode)
-                        (osc[j] as OscillatorNode).frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick);
-                    if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2 && step[2] !== undefined)
-                        lastPWM[j] = step[2];
-                    if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2 && step[5] !== undefined)
-                        lastPWM2[j] = step[5];
+                    if (step && step[0] && frequencie[gnt(step[0])]) {
+                        // set Filter cutoff if found
+                        if (step[4] !== undefined)
+                            filter[j].frequency.setValueAtTime(step[4], tick);
+                        // set LFO amount if found
+                        if (step[3] !== undefined)
+                            modGain[j].gain.setValueAtTime(step[3], tick);
+                        // set PWM value if found
+                        if ((osc[j] as PulseOscillator).width && step[2] !== undefined)
+                            (osc[j] as PulseOscillator).width?.setValueAtTime(step[2], tick);
+                        // For noise
+                        if (osc[j].constructor === AudioBufferSourceNode)
+                            (osc[j] as AudioBufferSourceNode).playbackRate.setValueAtTime(
+                                frequencie[gnt(step[0])] / (SONG.sampleData[j][1].length >= 2048 ? SONG.sampleData[j][1].length / 128 : 1) * SONG.sampleData[j][1].length / 44100, tick);
+                        // only set frequency if OscNode
+                        if (osc[j].constructor === OscillatorNode)
+                            (osc[j] as OscillatorNode).frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick);
+                        if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2 && step[2] !== undefined)
+                            lastPWM[j] = step[2];
+                        if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2 && step[5] !== undefined)
+                            lastPWM2[j] = step[5];
 
-                    if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2) {
-                        (osc[j] as PulseOscillator).osc1.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
+                        if ((osc[j] as PulseOscillator).osc1 && (osc[j] as PulseOscillator).osc2) {
+                            (osc[j] as PulseOscillator).osc1.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
                             (osc[j] as PulseOscillator).osc2.frequency.setValueAtTime((frequencie[gnt(step[0])] / (SONG.trans || 2)), tick),
                             (osc[j] as PulseOscillator).delay.delayTime.setValueAtTime((1 - lastPWM[j] || 0) / frequencie[gnt(step[0])], tick);
-                        (osc[j] as PulseOscillator).osc2.detune.setValueAtTime(lastPWM2[j] || 0, tick);
+                            (osc[j] as PulseOscillator).osc2.detune.setValueAtTime(lastPWM2[j] || 0, tick);
+                        }
+                        if (tick > 0) {
+                            amp[1][j].gain.setValueAtTime(lastVol[j] || 0, fix(tick - n));
+                            amp[1][j].gain.linearRampToValueAtTime(0, tick);
+                        }
+                        amp[1][j].gain.setValueAtTime(0, nlen ? tick + (speed - nlen) : tick);
+                        amp[1][j].gain.linearRampToValueAtTime(step[1] || 1, fix(tick + n));
+                        lastVol[j] = step[1] || 1;
+                    } else if (step) {
+                        if (tick > 0) {
+                            amp[1][j].gain.setValueAtTime(lastVol[j] || 0, fix(tick - n));
+                            amp[1][j].gain.linearRampToValueAtTime(0, tick);
+                        }
+                        lastVol[j] = 0;
                     }
-                    if (tick > 0) {
-                        amp[1][j].gain.setValueAtTime(lastVol[j] || 0, fix(tick - n));
-                        amp[1][j].gain.linearRampToValueAtTime(0, tick);
-                    }
-                    amp[1][j].gain.setValueAtTime(0, nlen ? tick + (speed - nlen) : tick);
-                    amp[1][j].gain.linearRampToValueAtTime(step[1] || 1, fix(tick + n));
-                    lastVol[j] = step[1] || 1;
-                } else if (step) {
-                    if (tick > 0) {
-                        amp[1][j].gain.setValueAtTime(lastVol[j] || 0, fix(tick - n));
-                        amp[1][j].gain.linearRampToValueAtTime(0, tick);
-                    }
-                    lastVol[j] = 0;
+                    tick = fix((time + (++i * speed)));
                 }
-                tick = fix((time + (++i * speed)));
             }
+            setTime(tick);
+            setLastVol([...lastVol]);
+            setLastPWM([...lastPWM]);
+            setLastPWM2([...lastPWM2]);
+            setStartSchedule(false);
         }
-        setTime(tick);
-        setLastVol([...lastVol]);
-        setLastPWM([...lastPWM]);
-        setLastPWM2([...lastPWM2]);
-    };
+    }, [startSchedule]);
 
     const startSong = () => {
         function BufferNode(ctx: AudioContext, rate: number, data: number[]): AudioBufferSourceNode {
@@ -241,6 +245,7 @@ export function useBSP() {
         }
 
         setDelayGain(delayGain);
+        setStartSchedule(true);
         setModGain(modGain);
         setFilter(filter);
         setSpeed(speed);
@@ -249,7 +254,6 @@ export function useBSP() {
         setOsc(osc);
         setAmp(amp);
 
-        schedule();
         worker.postMessage(0);
     };
 
