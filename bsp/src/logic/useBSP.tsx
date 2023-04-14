@@ -132,11 +132,11 @@ export function useBSP() {
     const [ctx, setCtx] = useState(new AudioContext())
     const [time, setTime] = useState(ctx.currentTime)
     const [osc, setOsc] = useState<(OscillatorNode | AudioBufferSourceNode | PulseOscillator)[]>([])
-    const [amp, setAmp] = useState([[], []])
+    const [amp, setAmp] = useState<[GainNode[], GainNode[]]>([[], []])
     const [delay, setDelay] = useState([])
     const [delayGain, setDelayGain] = useState([])
     const [filter, setFilter] = useState([])
-    const [modGain, setModGain] = useState([])
+    const [modGain, setModGain] = useState<GainNode[]>([])
     const [LFO, setLFO] = useState({})
     // create Oscillators for song.
     const [waves, setWaves] = useState<OscillatorType[]>(["sine", "square", "triangle", "sawtooth"])
@@ -161,8 +161,10 @@ export function useBSP() {
         LFO.type = 'sine';
         LFO.frequency.setValueAtTime(7.8, 0);
         LFO.start(0);
-        setLFO(LFO)
+
         const osc: (OscillatorNode | AudioBufferSourceNode | PulseOscillator)[] = []
+        const modGain: GainNode[] = []
+        const amp: [GainNode[], GainNode[]] = [[], []]
 
         for (var j = 0; j < SONG.seq.length; j++) {
             osc[j] = ctx.createOscillator();
@@ -182,27 +184,27 @@ export function useBSP() {
                 (osc[j] as OscillatorNode).type = waves[1];
             }
             if (SONG.wave) {
-                BSP.modGain[j] = ctx.createGain();
-                BSP.modGain[j].gain.setValueAtTime(0, 0);
+                modGain[j] = ctx.createGain();
+                modGain[j].gain.setValueAtTime(0, 0);
                 if (SONG.wave[j] === 4)
-                    BSP.modGain[j].connect((osc[j] as AudioBufferSourceNode).playbackRate);
+                    modGain[j].connect((osc[j] as AudioBufferSourceNode).playbackRate);
                 else if (SONG.wave[j] !== 5)
-                    BSP.modGain[j].connect((osc[j] as OscillatorNode).frequency);
+                    modGain[j].connect((osc[j] as OscillatorNode).frequency);
                 else
-                    BSP.modGain[j].connect((osc[j] as PulseOscillator).osc1.frequency),
-                        BSP.modGain[j].connect((osc[j] as PulseOscillator).osc2.frequency);
-                LFO.connect(BSP.modGain[j]);
+                    modGain[j].connect((osc[j] as PulseOscillator).osc1.frequency),
+                        modGain[j].connect((osc[j] as PulseOscillator).osc2.frequency);
+                LFO.connect(modGain[j]);
             }
 
-            BSP.amp[0][j] = ctx.createGain(); // Osc Channel Volume
-            BSP.amp[1][j] = ctx.createGain(); // Osc Note Volume
-            BSP.amp[1][j].gain.setValueAtTime(0, 0);
-            BSP.amp[0][j].gain.setValueAtTime(SONG.cVol && SONG.cVol[j] ? SONG.cVol[j] : 1, 0);
+            amp[0][j] = ctx.createGain(); // Osc Channel Volume
+            amp[1][j] = ctx.createGain(); // Osc Note Volume
+            amp[1][j].gain.setValueAtTime(0, 0);
+            amp[0][j].gain.setValueAtTime(SONG.cVol && SONG.cVol[j] ? SONG.cVol[j] : 1, 0);
             if (SONG.wave && SONG.wave[j] == 5)
-                (osc[j] as PulseOscillator).output.connect(BSP.amp[1][j]);
+                (osc[j] as PulseOscillator).output.connect(amp[1][j]);
             else
-                (osc[j] as OscillatorNode).connect(BSP.amp[1][j]);
-            BSP.amp[1][j].connect(BSP.amp[0][j]);
+                (osc[j] as OscillatorNode).connect(amp[1][j]);
+            amp[1][j].connect(amp[0][j]);
 
             BSP.Filter[j] = ctx.createBiquadFilter();
             BSP.Filter[j].frequency.setValueAtTime(18000, 0);
@@ -223,8 +225,8 @@ export function useBSP() {
                 BSP.Filter[j].connect(ctx.destination);
 
             } else {
-                BSP.amp[0][j].connect(BSP.Delay[j]);
-                BSP.amp[0][j].connect(ctx.destination);
+                amp[0][j].connect(BSP.Delay[j]);
+                amp[0][j].connect(ctx.destination);
             }
         }
 
@@ -232,7 +234,10 @@ export function useBSP() {
             osc[i].start(ctx.currentTime);
         }
 
+        setLFO(LFO);
         setOsc(osc);
+        setModGain(modGain);
+        setAmp(amp);
 
         schedule();
         worker.postMessage(0);
