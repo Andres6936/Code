@@ -6,7 +6,7 @@ export interface Song {
     bpm: number,
     comment: string,
     cVol: number[],
-    wave: number[],
+    wave: (number | Float32Array[])[],
     delay: number[],
     sampleData: any[],
     seq: any[]

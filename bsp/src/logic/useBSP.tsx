@@ -142,10 +142,10 @@ export function useBSP() {
     const [waves, setWaves] = useState<OscillatorType[]>(["sine", "square", "triangle", "sawtooth"])
 
     const startSong = () => {
-        function BufferNode(ctx: AudioContext, rate, data): AudioBufferSourceNode {
-            var buf = ctx.createBuffer(1, data.length, rate);
+        function BufferNode(ctx: AudioContext, rate: number, data: number[]): AudioBufferSourceNode {
+            const buf = ctx.createBuffer(1, data.length, rate);
             buf.getChannelData(0).set(data);
-            var bufferSource = ctx.createBufferSource();
+            const bufferSource = ctx.createBufferSource();
 
             bufferSource.buffer = buf;
             bufferSource.loop = true;
@@ -177,11 +177,11 @@ export function useBSP() {
             if (SONG.wave && SONG.wave[j] === 5) osc[j] = useCreatePulseOscillator(ctx);
             // Periodic wave
             if (SONG.wave && SONG.wave[j] && SONG.wave[j].constructor === Array) {
-                var waveform = ctx.createPeriodicWave(SONG.wave[j][0], SONG.wave[j][1]);
+                var waveform = ctx.createPeriodicWave((SONG.wave[j] as Float32Array[])[0], (SONG.wave[j] as Float32Array[])[1]);
                 (osc[j] as OscillatorNode).setPeriodicWave(waveform);
                 // Raw Oscillator Waveform
-            } else if (SONG.wave && waves[SONG.wave[j]] !== undefined) {
-                (osc[j] as OscillatorNode).type = waves[SONG.wave[j]];
+            } else if (SONG.wave && waves[(SONG.wave[j] as number)] !== undefined) {
+                (osc[j] as OscillatorNode).type = waves[(SONG.wave[j] as number)];
                 // No waveforms defined
             } else if (!SONG.wave) {
                 (osc[j] as OscillatorNode).type = waves[1];
