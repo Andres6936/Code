@@ -86,8 +86,9 @@ export function useBSP() {
             return n.substr(0, 3).replace("-", "");
         };
 
+        let tick = time;
         for (var n = 0.000501, j = 0; j < SONG.seq.length; j++) {
-            for (var i = 0, tick = time; i < SONG.seq[j].length;) {
+            for (let i = 0; i < SONG.seq[j].length;) {
                 var step = SONG.seq[j][i], note, nlen = 0;
                 if (step && step[0] && step[0].length === 4)  // note length parse
                     nlen = speed * (("ABCDEFGQ".indexOf(step[0][3].toUpperCase()) + 1) / 8);
