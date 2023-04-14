@@ -10,8 +10,8 @@ export function useBSP() {
     const [lastPWM2, setLastPWM2] = useState<any[]>([])
     const [speed, setSpeed] = useState(0)
     const [sub, setSub] = useState(0)
-    const [ctx, setCtx] = useState(new AudioContext())
-    const [time, setTime] = useState<number>(ctx.currentTime)
+    const [ctx, setCtx] = useState<Optional<AudioContext>>(Optional.empty())
+    const [time, setTime] = useState<number>(0)
     const [osc, setOsc] = useState<(OscillatorNode | AudioBufferSourceNode | PulseOscillator)[]>([])
     const [amp, setAmp] = useState<[GainNode[], GainNode[]]>([[], []])
     const [delay, setDelay] = useState<DelayNode[]>([])
@@ -66,9 +66,11 @@ export function useBSP() {
 
     useEffect(() => {
         worker.onmessage = function (e) {
-            // if running out of time, schedule the next loop of the song
-            if (ctx.currentTime >= time - (speed * sub)) {
-                setStartSchedule(true);
+            if (ctx.isPresent()) {
+                // if running out of time, schedule the next loop of the song
+                if (ctx.get().currentTime >= time - (speed * sub)) {
+                    setStartSchedule(true);
+                }
             }
         };
 
@@ -158,6 +160,8 @@ export function useBSP() {
         }
 
         if (currentSong.isPresent()) {
+            const ctx = new AudioContext();
+            const time = ctx.currentTime;
             const SONG: Song = currentSong.get();
             const speed = 60 / SONG.bpm / (SONG.divide || 4)
             setSub(SONG.seq[0].length);
@@ -248,6 +252,8 @@ export function useBSP() {
             setFilter(filter);
             setSpeed(speed);
             setDelay(delay);
+            setTime(time);
+            setCtx(ctx);
             setLFO(LFO);
             setOsc(osc);
             setAmp(amp);
@@ -261,13 +267,17 @@ export function useBSP() {
     const changeSong = (song: Optional<Song>) => setCurrentSong(song);
 
     const pause = async () => {
-        await ctx.suspend();
-        setIsPaused(true)
+        if (ctx.isPresent()) {
+            await ctx.get().suspend();
+            setIsPaused(true)
+        }
     }
 
     const resume = async () => {
-        await ctx.resume()
-        setIsPaused(false)
+        if (ctx.isPresent()) {
+            await ctx.get().resume()
+            setIsPaused(false)
+        }
     }
 
     return {
