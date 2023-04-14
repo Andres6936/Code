@@ -28,27 +28,21 @@ interface Props {
 }
 
 export function AppContextProvider(props: Props) {
-    const BSP = useMemo(() => useBSP(), [])
+    const BSP = useBSP();
     
     const getCurrentSong = (): Optional<Song> => {
-        if (BSP.SONG) {
-            return Optional.of(BSP.SONG)
+        if (BSP.getCurrentSong().isPresent()) {
+            return Optional.of(BSP.getCurrentSong().get())
         } else {
             return Optional.empty();
         }
     }
 
-    const isPaused = () => BSP.paused
+    const isPaused = (): boolean => BSP.isPaused
     
-    const suspend = () => {
-        BSP.ctx.suspend();
-        BSP.paused = true;
-    }
+    const suspend = () => BSP.pause();
     
-    const resume = () => {
-        BSP.ctx.resume();
-        BSP.paused = false;
-    }
+    const resume = () => BSP.resume();
     
     return (
         <AppContext.Provider value={{
