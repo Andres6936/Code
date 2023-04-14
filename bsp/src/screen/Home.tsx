@@ -2,6 +2,7 @@ import {useContext, useEffect, useState} from "react";
 import {AppContext, IAppContext} from "../context/AppContext";
 import {Optional} from "typescript-optional";
 import { Song } from "../types/Song";
+import {useAutomation} from "../songs/Old";
 
 const BSP = {};
 const songs = [
@@ -62,6 +63,20 @@ function Description() {
     return renderDescription();
 }
 
+interface ISong {
+    song: string
+}
+
+export function ButtonSong(props: ISong) {
+    const appContext = useContext<IAppContext>(AppContext)
+
+    const onClick = () => appContext.playSong(useAutomation());
+
+    return (
+        <a onClick={onClick}>{props.song}</a>
+    )
+}
+
 export function Home() {
     useEffect(() => {
         for (var s = '', i = 0; i < songs.length; i++) {
@@ -93,6 +108,7 @@ export function Home() {
             
             <Stop/>
             <div id="z7i"></div>
+            <ButtonSong song={"Automation Play"}/>
             <Description/>
         </div>
     )

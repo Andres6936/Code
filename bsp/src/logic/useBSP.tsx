@@ -246,6 +246,7 @@ export function useBSP() {
                 osc[i].start(ctx.currentTime);
             }
 
+            setCtx(Optional.of(ctx));
             setDelayGain(delayGain);
             setStartSchedule(true);
             setModGain(modGain);
@@ -253,7 +254,6 @@ export function useBSP() {
             setSpeed(speed);
             setDelay(delay);
             setTime(time);
-            setCtx(ctx);
             setLFO(LFO);
             setOsc(osc);
             setAmp(amp);
@@ -286,5 +286,6 @@ export function useBSP() {
         pause,
         resume,
         changeSong,
+        startSong,
     };
 }
