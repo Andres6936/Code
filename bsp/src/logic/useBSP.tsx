@@ -133,9 +133,9 @@ export function useBSP() {
     const [time, setTime] = useState(ctx.currentTime)
     const [osc, setOsc] = useState<(OscillatorNode | AudioBufferSourceNode | PulseOscillator)[]>([])
     const [amp, setAmp] = useState<[GainNode[], GainNode[]]>([[], []])
-    const [delay, setDelay] = useState([])
-    const [delayGain, setDelayGain] = useState([])
-    const [filter, setFilter] = useState([])
+    const [delay, setDelay] = useState<DelayNode[]>([])
+    const [delayGain, setDelayGain] = useState<GainNode[]>([])
+    const [filter, setFilter] = useState<BiquadFilterNode[]>([])
     const [modGain, setModGain] = useState<GainNode[]>([])
     const [LFO, setLFO] = useState({})
     // create Oscillators for song.
@@ -165,6 +165,9 @@ export function useBSP() {
         const osc: (OscillatorNode | AudioBufferSourceNode | PulseOscillator)[] = []
         const modGain: GainNode[] = []
         const amp: [GainNode[], GainNode[]] = [[], []]
+        const filter: BiquadFilterNode[] = []
+        const delay: DelayNode[] = []
+        const delayGain: GainNode[] = []
 
         for (var j = 0; j < SONG.seq.length; j++) {
             osc[j] = ctx.createOscillator();
@@ -206,26 +209,26 @@ export function useBSP() {
                 (osc[j] as OscillatorNode).connect(amp[1][j]);
             amp[1][j].connect(amp[0][j]);
 
-            BSP.Filter[j] = ctx.createBiquadFilter();
-            BSP.Filter[j].frequency.setValueAtTime(18000, 0);
-            BSP.Filter[j].Q.setValueAtTime(10, 0);
-            BSP.Filter[j].type = 'lowpass';
+            filter[j] = ctx.createBiquadFilter();
+            filter[j].frequency.setValueAtTime(18000, 0);
+            filter[j].Q.setValueAtTime(10, 0);
+            filter[j].type = 'lowpass';
 
-            BSP.Delay[j] = ctx.createDelay(.5);
-            BSP.Delay[j].delayTime.setValueAtTime(BSP.speed * 2, 0)
-            BSP.DelayGain[j] = ctx.createGain();
-            BSP.DelayGain[j].gain.setValueAtTime(SONG.delay && SONG.delay[j] ? SONG.delay[j] : 0, 0);
+            delay[j] = ctx.createDelay(.5);
+            delay[j].delayTime.setValueAtTime(BSP.speed * 2, 0)
+            delayGain[j] = ctx.createGain();
+            delayGain[j].gain.setValueAtTime(SONG.delay && SONG.delay[j] ? SONG.delay[j] : 0, 0);
 
-            BSP.Delay[j].connect(BSP.DelayGain[j]);
-            BSP.DelayGain[j].connect(ctx.destination);
+            delay[j].connect(delayGain[j]);
+            delayGain[j].connect(ctx.destination);
 
             if (SONG.wave) {
-                BSP.amp[0][j].connect(BSP.Filter[j]);
-                BSP.Filter[j].connect(BSP.Delay[j]);
-                BSP.Filter[j].connect(ctx.destination);
+                amp[0][j].connect(filter[j]);
+                filter[j].connect(delay[j]);
+                filter[j].connect(ctx.destination);
 
             } else {
-                amp[0][j].connect(BSP.Delay[j]);
+                amp[0][j].connect(delay[j]);
                 amp[0][j].connect(ctx.destination);
             }
         }
@@ -234,9 +237,12 @@ export function useBSP() {
             osc[i].start(ctx.currentTime);
         }
 
+        setDelayGain(delayGain);
+        setModGain(modGain);
+        setFilter(filter);
+        setDelay(delay);
         setLFO(LFO);
         setOsc(osc);
-        setModGain(modGain);
         setAmp(amp);
 
         schedule();
