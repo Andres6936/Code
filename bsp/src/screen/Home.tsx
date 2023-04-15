@@ -143,13 +143,21 @@ export function ListSong() {
 export function Home() {
     return (
         <div className={"display:flex flex:col p:1rem min-h:100vh bg:black"}>
-            <div className={"font:1.5rem color:white"}>
-                This is a testbed for BSP1, my prototype music sequencer/synth, very much an alpha and not yet fully
-                realized.
-                But enjoy the music anyway.
-                Uses only basic Web Audio API components.
-                <a target="_blank" href="http://github.com/bryc/code/tree/master/bsp">Repo/more info here</a>.
+            <div className={"display:flex align-items:center justify-content:space-between"}>
+                <div className={"r:50% w:2rem h:2rem border:1px|white|solid color:white display:flex align-items:center justify-content:center" }>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                </div>
+
+                <div className={"r:50% w:2rem h:2rem border:1px|white|solid color:white display:flex align-items:center justify-content:center" }>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-list-nested" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </div>
             </div>
+
+            <h1 className={"font-family:bahnschrift  font-size:2.5rem color:white uppercase"}>Your Playlist</h1>
 
             <Stop/>
             <ListSong/>
