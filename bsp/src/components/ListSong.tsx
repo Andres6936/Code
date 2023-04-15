@@ -139,7 +139,6 @@ function ButtonSong(props: ISong) {
             </div>
             <div className={"display:flex flex:col flex:3"}>
                 <h1 className={"text:start font-family:bahnschrift uppercase m:0 p:0"}>{props.song.title}</h1>
-                <p className={"text:start font-family:bahnschrift opacity:0.5 m:0 p:0"}>Author: {props.song.author}</p>
                 <p className={"text:start font-family:bahnschrift text:ellipsis opacity:0.5 m:0 p:0"}>Description: {props.song.comment}</p>
             </div>
         </div>
