@@ -10,5 +10,6 @@ export interface Song {
     delay: number[],
     sampleData: any[],
     seq: any[],
-    trans?: number
+    trans?: number,
+    ptrn?: any[]
 }

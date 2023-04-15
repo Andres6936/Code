@@ -3,7 +3,7 @@ import {Song} from "../types/Song"
 export function useStormlord2() {
     const SONG: Song = {} as Song
 
-    Array.prototype.rotate = function (t) {
+    Array.prototype.rotate = function (t?: number | undefined) {
         return this.slice(t, this.length).concat(this.slice(0, t))
     }
     var w0 = new Float32Array([0, 1, .5, .3, .5, .1]),
