@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from "react";
 import {AppContext, IAppContext} from "../context/AppContext";
 import {Optional} from "typescript-optional";
 import {Song} from "../types/Song";
-import {useAutomation} from "../songs/Old";
+import {useOld} from "../songs/Old";
 import {useMono} from "../songs/Mono";
 import {useCool} from "../songs/Cool";
 import {usePoly} from "../songs/Poly";
@@ -13,6 +13,7 @@ import {useWavetablez} from "../songs/Wavetablez";
 import {useWavetablez2} from "../songs/Wavetablez2";
 import {useAutomation2} from "../songs/Automation2";
 import {useWavetablez3} from "../songs/Wavetablez3";
+import { useAutomation } from "../songs/Automation";
 
 type TypeSong =
     "old" |
@@ -81,7 +82,7 @@ export function ButtonSong(props: ISong) {
     const getSong = (): Song => {
         switch (props.song) {
             case "old":
-                return useOrgan();
+                return useOld();
             case "mono":
                 return useMono();
             case "cool":

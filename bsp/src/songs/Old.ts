@@ -1,6 +1,6 @@
 import {Song} from "../types/Song"
 
-export function useAutomation() {
+export function useOld() {
     const SONG: Song = {} as Song
 
     SONG.bpm = 256
