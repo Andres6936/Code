@@ -3,9 +3,9 @@ import {Song} from "../types/Song"
 export function useWavetablez3() {
     const SONG: Song = {} as Song
 
-    function bT() {
-        for (var i = 0, out = []; i < arguments.length; i++) {
-            var item = arguments[i];
+    function bT(...args: (number | undefined[] | number[])[]) {
+        for (var i = 0, out = []; i < args.length; i++) {
+            var item = args[i];
             if (typeof item === 'number' && SONG.ptrn[item] !== undefined)
                 item = SONG.ptrn[item];
             if (Array.isArray(item)) out = out.concat(item);
@@ -16,7 +16,7 @@ export function useWavetablez3() {
     Array.prototype.rot = function (t) {
         return this.slice(t, this.length).concat(this.slice(0, t))
     }
-    TSH = s => {
+    const TSH = (s: string) => {
         for (var i = 0, h = 9; i < s.length;) h = Math.imul(h ^ s.charCodeAt(i++), 9 ** 9);
         return h ^ h >>> 9
     }

@@ -3,9 +3,9 @@ import {Song} from "../types/Song"
 export function useWavetablez2() {
     const SONG: Song = {} as Song
 
-    function bT() {
-        for (var i = 0, out = []; i < arguments.length; i++) {
-            var item = arguments[i];
+    function bT(...args: (number | undefined[] | number[])[]) {
+        for (var i = 0, out = []; i < args.length; i++) {
+            var item = args[i];
             if (typeof item === 'number' && SONG.ptrn[item] !== undefined)
                 item = SONG.ptrn[item];
             if (Array.isArray(item)) out = out.concat(item);
