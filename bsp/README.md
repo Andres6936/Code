@@ -6,4 +6,8 @@ Unfortunately I didn't anticipate many of the restrictions of the API, and it tu
 
 The best that can be done are simple ON/OFF sounds with some LFO modulation, and extremely simple white noise percussion (with a fixed 1 step length). I archived BSP2 in the 'old-code' section which contains some ideas for further enhancement (with better LFO control over parameters), but to me it's almost not worth pursuing if I can't do percussion sounds.
 
-So this project is kinda on hold until I can figure out more flexible ways to implement the sequencer timer, and rewrite the code. 
+So this project is kinda on hold until I can figure out more flexible ways to implement the sequencer timer, and rewrite the code.
+
+#### Design
+
+[Take](https://cdn.dribbble.com/userupload/4157925/file/original-5a6064180af4bed14275d7f8f9fdfede.png?compress=1&resize=1200x900&vertical=center)
