@@ -14,7 +14,7 @@ export function useStormlord2() {
     SONG.title = "stormlord 2"
     SONG.author = "bryc"
     SONG.date = "jan-14-2018"
-    SONG.comment = "pattern variables, rotated patterns, periodic waves.<br>remake of a remake of a remake (https://soundcloud.com/bryc/stormlord-two)"
+    SONG.comment = "pattern variables, rotated patterns, periodic waves.<br>remake of a remake of a remake (soundcloud.com stormlord-two)"
     SONG.bpm = 81
     SONG.divide = 6
     SONG.cVol = [.25, .19, .08, .045, .06, .05, .05]
