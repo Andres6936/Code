@@ -133,7 +133,7 @@ export function ListSong() {
     ];
 
     return (
-        <div className={"display:flex flex:row gap:1rem"}>
+        <div className={"display:flex flex:row flex:wrap gap:1rem"}>
             {songs.map(song => <ButtonSong key={song} song={song}/>)}
         </div>
     )
@@ -141,11 +141,11 @@ export function ListSong() {
 
 export function Home() {
     return (
-        <div>
-            <div id="z6i">
+        <div className={"display:flex flex:col p:1rem min-h:100vh bg:black"}>
+            <div className={"font:1.5rem color:white"}>
                 This is a testbed for BSP1, my prototype music sequencer/synth, very much an alpha and not yet fully
-                realized. But
-                enjoy the music anyway.
+                realized.
+                But enjoy the music anyway.
                 Uses only basic Web Audio API components.
                 <a target="_blank" href="http://github.com/bryc/code/tree/master/bsp">Repo/more info here</a>.
             </div>
