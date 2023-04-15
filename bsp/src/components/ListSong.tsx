@@ -15,6 +15,8 @@ import {useWavetablez3} from "../songs/Wavetablez3";
 import {useAutomation} from "../songs/Automation";
 import {Song} from "../types/Song";
 
+const PIXEL_OFFSET_Y: number = 25;
+
 const songs: TypeSong[] = [
     "old",
     "mono",
@@ -95,10 +97,20 @@ export function ListSong() {
         }
     }
 
+    const getTranslateForConsecutivesElements = (position: number) => {
+        if (position > 0) {
+            return `translateY(-${PIXEL_OFFSET_Y * position}px)`
+        }
+    }
+
     return (
         <div className={"display:flex flex:row p:0.4rem flex:wrap"}>
-            {songs.map(song => (
-                <ButtonSong key={song} backgroundColor={getRandomBackgroundColor()} song={getSongByName(song)}/>
+            {songs.map((song: TypeSong, index: number) => (
+                <ButtonSong
+                    key={song}
+                    song={getSongByName(song)}
+                    backgroundColor={getRandomBackgroundColor()}
+                    className={getTranslateForConsecutivesElements(index)}/>
             ))}
         </div>
     )
@@ -107,6 +119,7 @@ export function ListSong() {
 
 interface ISong {
     song: Song,
+    className?: string,
     backgroundColor: string,
 }
 
@@ -118,7 +131,8 @@ function ButtonSong(props: ISong) {
     const onClick = () => appContext.playSong(props.song);
 
     return (
-        <div className={"rt:2rem py:8rem w:100% text:center " + getBackgroundClass()} onClick={onClick}>
+        <div className={(props.className ?? " ") + " rt:2rem py:8rem w:100% text:center " + getBackgroundClass()}
+             onClick={onClick}>
             <p>{props.song.title}</p>
         </div>
     )
