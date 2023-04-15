@@ -15,39 +15,24 @@ import {useWavetablez3} from "../songs/Wavetablez3";
 import {useAutomation} from "../songs/Automation";
 import {Song} from "../types/Song";
 
-export function ListSong() {
-    const songs: TypeSong[] = [
-        "old",
-        "mono",
-        "organ",
-        "cool",
-        "poly",
-        "swell",
-        "stormlord2",
-        "automation",
-        "automation2",
-        "wavetablez",
-        "wavetablez2",
-        "wavetablez3",
+const songs: TypeSong[] = [
+    "old",
+    "mono",
+    "organ",
+    "cool",
+    "poly",
+    "swell",
+    "stormlord2",
+    "automation",
+    "automation2",
+    "wavetablez",
+    "wavetablez2",
+    "wavetablez3",
     ];
 
-    return (
-        <div className={"display:flex flex:row flex:wrap gap:1rem"}>
-            {songs.map(song => <ButtonSong key={song} song={song}/>)}
-        </div>
-    )
-}
-
-
-interface ISong {
-    song: TypeSong
-}
-
-export function ButtonSong(props: ISong) {
-    const appContext = useContext<IAppContext>(AppContext)
-
-    const getSong = (): Song => {
-        switch (props.song) {
+export function ListSong() {
+    const getSongByName = (name: TypeSong): Song => {
+        switch (name) {
             case "old":
                 return useOld();
             case "mono":
@@ -75,11 +60,27 @@ export function ButtonSong(props: ISong) {
         }
     }
 
-    const onClick = () => appContext.playSong(getSong());
+    return (
+        <div className={"display:flex flex:row p:0.4rem flex:wrap"}>
+            {songs.map(song => <ButtonSong key={song} song={getSongByName(song)}/>)}
+        </div>
+    )
+}
+
+
+interface ISong {
+    song: Song
+}
+
+function ButtonSong(props: ISong) {
+    const appContext = useContext<IAppContext>(AppContext)
+
+
+    const onClick = () => appContext.playSong(props.song);
 
     return (
-        <div className={"p:1rem r:1rem min-w:5rem bg:white text:center"} onClick={onClick}>
-            <p>{props.song}</p>
+        <div className={"rt:2rem py:8rem w:100% bg:gold-80 text:center"} onClick={onClick}>
+            <p>{props.song.title}</p>
         </div>
     )
 }

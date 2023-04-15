@@ -3,6 +3,7 @@ import {Song} from "../types/Song"
 export function useOld() {
     const SONG: Song = {} as Song
 
+    SONG.title = "Old"
     SONG.bpm = 256
     SONG.wave = [1]
     SONG.cVol = [0.18]
