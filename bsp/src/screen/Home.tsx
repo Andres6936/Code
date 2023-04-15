@@ -1,24 +1,32 @@
 import {useContext, useEffect, useState} from "react";
 import {AppContext, IAppContext} from "../context/AppContext";
 import {Optional} from "typescript-optional";
-import { Song } from "../types/Song";
+import {Song} from "../types/Song";
 import {useAutomation} from "../songs/Old";
+import {useMono} from "../songs/Mono";
+import {useCool} from "../songs/Cool";
+import {usePoly} from "../songs/Poly";
+import {useSwell} from "../songs/Swell";
+import {useOrgan} from "../songs/Organ";
+import {useStormlord2} from "../songs/Stormlord2";
+import {useWavetablez} from "../songs/Wavetablez";
+import {useWavetablez2} from "../songs/Wavetablez2";
+import {useAutomation2} from "../songs/Automation2";
+import {useWavetablez3} from "../songs/Wavetablez3";
 
-const BSP = {};
-const songs = [
-    "old",
-    "mono",
-    "organ",
-    "cool",
-    "poly",
-    "swell",
-    "stormlord2",
-    "automation",
-    "automation2",
-    "wavetablez",
-    "wavetablez2",
-    "wavetablez3",
-];
+type TypeSong =
+    "old" |
+    "mono" |
+    "cool" |
+    "poly" |
+    "swell" |
+    "organ" |
+    "stormlord2" |
+    "automation" |
+    "wavetablez" |
+    "wavetablez2" |
+    "automation2" |
+    "wavetablez3";
 
 function Stop() {
     const appContext = useContext<IAppContext>(AppContext)
@@ -33,7 +41,7 @@ function Stop() {
             setCurrentState("Resume")
         }
     }
-    
+
     return (
         <a onClick={onSwithPlay} href="#" id="wat">{currentState}</a>
     )
@@ -64,38 +72,74 @@ function Description() {
 }
 
 interface ISong {
-    song: string
+    song: TypeSong
 }
 
 export function ButtonSong(props: ISong) {
     const appContext = useContext<IAppContext>(AppContext)
 
-    const onClick = () => appContext.playSong(useAutomation());
+    const getSong = (): Song => {
+        switch (props.song) {
+            case "old":
+                return useOrgan();
+            case "mono":
+                return useMono();
+            case "cool":
+                return useCool();
+            case "poly":
+                return usePoly();
+            case "swell":
+                return useSwell();
+            case "organ":
+                return useOrgan();
+            case "stormlord2":
+                return useStormlord2()
+            case "automation":
+                return useAutomation()
+            case "wavetablez":
+                return useWavetablez()
+            case "wavetablez2":
+                return useWavetablez2()
+            case "automation2":
+                return useAutomation2()
+            case "wavetablez3":
+                return useWavetablez3()
+        }
+    }
+
+    const onClick = () => appContext.playSong(getSong());
 
     return (
-        <a onClick={onClick}>{props.song}</a>
+        <div className={"p:1rem r:1rem min-w:5rem bg:white text:center"} onClick={onClick}>
+            <p>{props.song}</p>
+        </div>
+    )
+}
+
+export function ListSong() {
+    const songs: TypeSong[] = [
+        "old",
+        "mono",
+        "organ",
+        "cool",
+        "poly",
+        "swell",
+        "stormlord2",
+        "automation",
+        "automation2",
+        "wavetablez",
+        "wavetablez2",
+        "wavetablez3",
+    ];
+
+    return (
+        <div className={"display:flex flex:row gap:1rem"}>
+            {songs.map(song => <ButtonSong key={song} song={song}/>)}
+        </div>
     )
 }
 
 export function Home() {
-    useEffect(() => {
-        for (var s = '', i = 0; i < songs.length; i++) {
-            s += `<a id=z href=?${songs[i]}>${songs[i]}</a>`;
-        }
-        const script = document.createElement("script");
-        const element = document.querySelector("div#z7i");
-        if (element) {
-            element.innerHTML = s
-        }
-
-        if (location.search.length && songs.indexOf(location.search.slice(1)) > -1) {
-            const s2 = document.createElement("script");
-            script.src = "bsp.js";
-            s2.src = "songs/" + location.search.slice(1) + ".js";
-            document.head.append(script), document.head.append(s2);
-        }
-    }, [])
-
     return (
         <div>
             <div id="z6i">
@@ -105,10 +149,9 @@ export function Home() {
                 Uses only basic Web Audio API components.
                 <a target="_blank" href="http://github.com/bryc/code/tree/master/bsp">Repo/more info here</a>.
             </div>
-            
+
             <Stop/>
-            <div id="z7i"></div>
-            <ButtonSong song={"Automation Play"}/>
+            <ListSong/>
             <Description/>
         </div>
     )
