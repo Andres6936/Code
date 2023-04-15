@@ -64,7 +64,7 @@ export function Home() {
             <ListSong/>
             <Description/>
 
-            <div className={"position:absolute bottom:3 left:3 right:3 bg:fade-84 r:2rem p:3rem"}>
+            <div className={"position:sticky bottom:3 left:3 right:3 bg:fade-84 r:2rem p:3rem"}>
                 <Stop/>
             </div>
         </div>
