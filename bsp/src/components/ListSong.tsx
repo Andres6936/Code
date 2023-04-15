@@ -28,7 +28,14 @@ const songs: TypeSong[] = [
     "wavetablez",
     "wavetablez2",
     "wavetablez3",
-    ];
+];
+
+function getRandomInt(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    // The maximum is exclusive and the minimum is inclusive
+    return Math.floor(Math.random() * (max - min) + min);
+}
 
 export function ListSong() {
     const getSongByName = (name: TypeSong): Song => {
@@ -60,26 +67,58 @@ export function ListSong() {
         }
     }
 
+    const getRandomBackgroundColor = () => {
+        const random: number = getRandomInt(0, 10);
+        switch (random) {
+            case 0:
+                return "gold-80";
+            case 1:
+                return "grass-80";
+            case 2:
+                return "green-80";
+            case 3:
+                return "cyan-80";
+            case 4:
+                return "teal-80";
+            case 5:
+                return "violet-50";
+            case 6:
+                return "purple-50";
+            case 7:
+                return "fuchsia-50";
+            case 8:
+                return "pink-50";
+            case 9:
+                return "red-50";
+            default:
+                return "blue-50"
+        }
+    }
+
     return (
         <div className={"display:flex flex:row p:0.4rem flex:wrap"}>
-            {songs.map(song => <ButtonSong key={song} song={getSongByName(song)}/>)}
+            {songs.map(song => (
+                <ButtonSong key={song} backgroundColor={getRandomBackgroundColor()} song={getSongByName(song)}/>
+            ))}
         </div>
     )
 }
 
 
 interface ISong {
-    song: Song
+    song: Song,
+    backgroundColor: string,
 }
 
 function ButtonSong(props: ISong) {
     const appContext = useContext<IAppContext>(AppContext)
 
+    const getBackgroundClass = () => " bg:" + props.backgroundColor
 
     const onClick = () => appContext.playSong(props.song);
 
     return (
-        <div className={"rt:2rem py:8rem w:100% bg:gold-80 text:center"} onClick={onClick}>
+        <div className={"rt:2rem py:8rem w:100% text:center " + getBackgroundClass()} onClick={onClick}>
             <p>{props.song.title}</p>
         </div>
     )
