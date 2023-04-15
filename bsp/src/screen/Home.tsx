@@ -29,9 +29,11 @@ type TypeSong =
     "automation2" |
     "wavetablez3";
 
+type TypeState = "Stop" | "Resume";
+
 function Stop() {
     const appContext = useContext<IAppContext>(AppContext)
-    const [currentState, setCurrentState] = useState<string>('Stop')
+    const [currentState, setCurrentState] = useState<TypeState>('Stop')
 
     const onSwithPlay = () => {
         if (appContext.isPaused()) {
@@ -43,8 +45,28 @@ function Stop() {
         }
     }
 
+    const getIconByState = () => {
+        if (currentState === "Stop") {
+            return (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-pause-fill color:blue-50" viewBox="0 0 16 16">
+                    <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+                </svg>
+            )
+        } else if (currentState === "Resume") {
+            return (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-play-fill color:blue-50" viewBox="0 0 16 16">
+                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                </svg>
+            )
+        } else {
+            console.error("Current State Not Implemented")
+        }
+    }
+
     return (
-        <a onClick={onSwithPlay} href="#" id="wat">{currentState}</a>
+        <div className={"display:flex align-items:center justify-content:center p:0.5rem position:absolute top:15 right:20 r:50% b:2px|solid|blue-50"} onClick={onSwithPlay}>
+            {getIconByState()}
+        </div>
     )
 }
 
@@ -159,7 +181,7 @@ export function Home() {
 
             <h1 className={"font-family:bahnschrift font-size:2.5rem color:white uppercase"}>Your Playlist</h1>
 
-            <div className={"display:flex flex:row align-items:center justify-content:space-between bb:1px|solid|#CCC"}>
+            <div className={"display:flex flex:row align-items:center justify-content:space-between bb:1px|solid|#CCC mb:1rem"}>
                 <div className={"color:white opacity:0.5 font-size:1.2rem font-family:bahnschrift"}>
                     <p className={"p:0 mb:0.4rem"}>Search ...</p>
                 </div>
@@ -170,7 +192,10 @@ export function Home() {
                 </div>
             </div>
 
-            <Stop/>
+            <div className={"position:absolute bottom:3 left:3 right:3 bg:fade-84 r:2rem p:3rem"}>
+                <Stop/>
+            </div>
+
             <ListSong/>
             <Description/>
         </div>
