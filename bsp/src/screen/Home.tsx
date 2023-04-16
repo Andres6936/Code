@@ -64,7 +64,15 @@ export function Home() {
             <ListSong/>
             <Description/>
 
-            <div className={"position:sticky bottom:3 left:3 right:3 bg:fade-84 r:2rem p:3rem"}>
+            <div className={"position:sticky bottom:3 left:3 right:3 bg:fade-84 r:2rem p:1rem"}>
+                <div>
+                    <h2 className={"font-family:antonio uppercase m:0 p:0"}>You need to calm down</h2>
+                    <p className={"font-family:arial m:0 mt:0.3rem p:0 opacity:0.8"}>Taylor Swift</p>
+                    <div className={"display:flex flex:row align-items:center justify-content:space-between"}>
+                        <p className={"font-family:arial opacity:0.8 color:blue-50"}>1:04</p>
+                        <p className={"font-family:arial opacity:0.8"}>3:29</p>
+                    </div>
+                </div>
                 <Stop/>
             </div>
         </div>
