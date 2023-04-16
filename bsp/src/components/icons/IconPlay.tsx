@@ -1,7 +1,5 @@
-interface Icon {
-    className?: string,
-    size?: number | string,
-}
+import { Icon } from "../../types/Icon";
+
 
 export function IconPlay(props: Icon) {
     return (

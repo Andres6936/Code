@@ -15,6 +15,7 @@ import {useWavetablez3} from "../songs/Wavetablez3";
 import {useAutomation} from "../songs/Automation";
 import {Song} from "../types/Song";
 import {IconPlay} from "./icons/IconPlay";
+import {IconFinger} from "./icons/IconFinger";
 
 const PIXEL_OFFSET_Y: number = 25;
 
@@ -137,7 +138,11 @@ function ButtonSong(props: ISong) {
                 + getBackgroundClass()} onClick={onClick}>
             <div className={"display:flex flex:1 flex:row gap:1rem"}>
                 <div className={"display:flex flex:1 justify-content:center"}>
-                    <div className={"r:50% bg:black w:6rem h:6rem"}/>
+                    <div className={"display:flex align-items:center justify-content:center r:50% bg:black w:6rem h:6rem"}>
+                        <div className={"display:flex  align-items:center justify-content:center r:50% bg:blue-50 p:0.3rem "}>
+                            <IconFinger className={"color:white"}/>
+                        </div>
+                    </div>
                 </div>
                 <div className={"display:flex flex:col flex:3"}>
                     <h1 className={"text:start font-family:antonio uppercase m:0 mb:1rem p:0"}>
@@ -149,9 +154,11 @@ function ButtonSong(props: ISong) {
                 </div>
             </div>
 
-            <div className={"display:flex flex:1 flex:row align-items:center mt:2rem justify-content:space-between gap:1rem"}>
+            <div
+                className={"display:flex flex:1 flex:row align-items:center mt:2rem justify-content:space-between gap:1rem"}>
                 <h1 className={"text:start font-family:antonio font-size:2.5rem uppercase m:0 ml:0.8rem p:0"}>{props.song.title}</h1>
-                <div className={"display:flex align-items:center p:0.5rem justify-content:center b:1px|solid|black r:50%"}>
+                <div
+                    className={"display:flex align-items:center p:0.5rem justify-content:center b:1px|solid|black r:50%"}>
                     <IconPlay/>
                 </div>
             </div>
