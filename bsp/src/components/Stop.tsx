@@ -29,7 +29,7 @@ export function Stop() {
             )
         } else if (currentState === "Resume") {
             return (
-                <IconPlay/>
+                <IconPlay className={"color:blue-50"}/>
             )
         } else {
             console.error("Current State Not Implemented")
