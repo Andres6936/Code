@@ -132,14 +132,24 @@ function ButtonSong(props: ISong) {
 
     return (
         <div
-            className={(props.className ?? " ") + " display:flex flex:row gap:1rem px:1rem align-items:center justify-content:space-between rt:2rem min-h:16rem w:100% text:center "
+            className={(props.className ?? " ") + " display:flex flex:col p:1rem rt:2rem min-h:16rem w:100% text:center "
                 + getBackgroundClass()} onClick={onClick}>
-            <div className={"display:flex flex:1 justify-content:center"}>
-                <div className={"r:50% bg:black w:6rem h:6rem"}/>
+            <div className={"display:flex flex:1 flex:row gap:1rem"}>
+                <div className={"display:flex flex:1 justify-content:center"}>
+                    <div className={"r:50% bg:black w:6rem h:6rem"}/>
+                </div>
+                <div className={"display:flex flex:col flex:3"}>
+                    <h1 className={"text:start font-family:antonio uppercase m:0 mb:1rem p:0"}>
+                        Daily Playlist
+                    </h1>
+                    <p className={"text:start font-family:bahnschrift font-size:1.2rem text:ellipsis opacity:0.7 m:0 p:0"}>
+                        Shakira, Maluma, JBalvin, Karol G and More.
+                    </p>
+                </div>
             </div>
-            <div className={"display:flex flex:col flex:3"}>
-                <h1 className={"text:start font-family:bahnschrift uppercase m:0 p:0"}>{props.song.title}</h1>
-                <p className={"text:start font-family:bahnschrift text:ellipsis opacity:0.5 m:0 p:0"}>Description: {props.song.comment}</p>
+
+            <div className={"display:flex flex:1 flex:row gap:1rem"}>
+                <h1 className={"text:start font-family:antonio uppercase m:0 mb:1rem p:0"}>{props.song.title}</h1>
             </div>
         </div>
     )
