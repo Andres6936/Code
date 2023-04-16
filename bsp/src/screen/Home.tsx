@@ -47,7 +47,7 @@ export function Home() {
                     </div>
                 </div>
 
-                <h1 className={"font-family:bahnschrift font-size:2.5rem color:white uppercase"}>Your Playlist</h1>
+                <h1 className={"font-family:antonio font-size:3.5rem color:white uppercase"}>Your Playlist</h1>
 
                 <div className={"display:flex flex:row align-items:center justify-content:space-between bb:1px|solid|#CCC mb:1rem"}>
                     <div className={"color:white opacity:0.5 font-size:1.2rem font-family:bahnschrift"}>
