@@ -133,7 +133,7 @@ function ButtonSong(props: ISong) {
 
     return (
         <div
-            className={(props.className ?? " ") + " display:flex flex:col p:1rem rt:2rem min-h:13rem w:100% text:center "
+            className={(props.className ?? " ") + " display:flex flex:col px:1rem py:3.5rem rt:2rem min-h:13rem w:100% text:center "
                 + getBackgroundClass()} onClick={onClick}>
             <div className={"display:flex flex:1 flex:row gap:1rem"}>
                 <div className={"display:flex flex:1 justify-content:center"}>
@@ -149,8 +149,8 @@ function ButtonSong(props: ISong) {
                 </div>
             </div>
 
-            <div className={"display:flex flex:1 flex:row align-items:center justify-content:space-between gap:1rem"}>
-                <h1 className={"text:start font-family:antonio uppercase m:0 ml:0.8rem p:0"}>{props.song.title}</h1>
+            <div className={"display:flex flex:1 flex:row align-items:center mt:2rem justify-content:space-between gap:1rem"}>
+                <h1 className={"text:start font-family:antonio font-size:2.5rem uppercase m:0 ml:0.8rem p:0"}>{props.song.title}</h1>
                 <div className={"display:flex align-items:center p:0.5rem justify-content:center b:1px|solid|black r:50%"}>
                     <IconPlay/>
                 </div>
